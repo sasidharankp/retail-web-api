@@ -1,0 +1,5 @@
+# Top Level Ignores
+node_modules
+
+# Nested Ignores
+**/node_modules

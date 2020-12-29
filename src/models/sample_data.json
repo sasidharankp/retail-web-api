@@ -1,0 +1,23 @@
+[
+    {
+        "_id": "5e9bd9d9cd15258609bec73e",
+        "name": "book",
+        "description": "Holy bible",
+        "price": 1.99,
+        "image": "https://i.picsum.photos/id/1010/5184/3456.jpg"
+    },
+    {
+        "_id": "5e9bd9fbcd15258609bec73f",
+        "name": "Shoes",
+        "description": "Sneakers",
+        "price": 9.99,
+        "image": "https://i.picsum.photos/id/103/2592/1936.jpg"
+    },
+    {
+        "_id": "5e9bda27cd15258609bec740",
+        "name": "Dream Catcher",
+        "description": "Feathers dream catcher",
+        "price": 4.99,
+        "image": "https://i.picsum.photos/id/104/3840/2160.jpg"
+    }
+]
