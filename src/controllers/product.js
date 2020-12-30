@@ -15,14 +15,14 @@ export const getAllProducts = (req, res) => {
 };
 
 export const getProductById = (req, res) => {
-	const id = req.params;
-	productModel.findOne(id)
-		.select(['-_id','-__v'])
+	const id = req.params.id;
+	productModel.findOne({productId:id})
+		.select('-_id -__v')
 		.then((result) => {
 			if (!result) {
 				res.status(404).json({
 					status: 'error',
-					message: 'productModel Not Found',
+					message: 'product Not Found',
 					productId: `${id}`
 				});
 			}else{
@@ -77,7 +77,7 @@ export const addProduct = (req, res) => {
 			})
 			.then(() => {
 				const productInfo = new productModel({
-					id: productCount + 1,
+					productId: productCount + 1,
 					name: req.body.name,
 					price: req.body.price,
 					description: req.body.description,
@@ -107,8 +107,8 @@ export const editProduct = (req, res) => {
 		image: req.body.image,
 		category: req.body.category,
 	};
-	productModel.findOneAndUpdate({id:id}, productInfo, {new: true})
-		.select(['-_id','-__v'])
+	productModel.findOneAndUpdate({productId:id}, productInfo, {new: true})
+		.select('-_id -__v')
 		.then((result) => {
 			res.json(result);
 		})
@@ -117,14 +117,15 @@ export const editProduct = (req, res) => {
 };
   
 export const deleteProduct = (req, res) => {
-	if (req.params.id == null) {
+	const id = req.params.id;
+	if (id == null) {
 		res.json({
 			status: 'error',
 			message: 'product id cant be empty',
 		});
 	} else {
-		productModel.findOneAndDelete({id: req.params.id})
-			.select(['-_id','-__v'])
+		productModel.findOneAndDelete({productId:id})
+			.select('-_id -__v')
 			.then((result) => {
 				if(!result){
 					res.status(404).json({ message: 'Product Not Found' });
