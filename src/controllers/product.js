@@ -1,9 +1,4 @@
-import express from 'express';
-// import mongoose from 'mongoose';
-
 import productModel from '../models/productSchema.js';
-
-const router = express.Router();
 
 export const getAllProducts = (req, res) => {
 	const limit = Number(req.query.limit) || 0;
@@ -64,11 +59,10 @@ export const getProductsByCategory = (req,res) => {
 				res.status(404).json({ message: 'No Such Category' });
 			}else{res.status(200).json(result);
 			}
-			
 		})
 		.catch((error) => res.status(404).json({ message: error.message }));
-
 };
+
 export const addProduct = (req, res) => {
 	if (typeof req.body == undefined) {
 		res.json({
@@ -82,7 +76,7 @@ export const addProduct = (req, res) => {
 				productCount = count;
 			})
 			.then(() => {
-				const result = new productModel({
+				const productInfo = new productModel({
 					id: productCount + 1,
 					name: req.body.name,
 					price: req.body.price,
@@ -90,9 +84,10 @@ export const addProduct = (req, res) => {
 					image: req.body.image,
 					category: req.body.category,
 				});
-				result.save()
+				productInfo.save()
 					.then(result => res.json(result))
 					.catch(error => console.log(error));
+				res.status(200).json(productInfo);
 			});
 	}
 };
@@ -140,5 +135,3 @@ export const deleteProduct = (req, res) => {
 			.catch((error) => res.status(404).json({ message: error.message }));
 	}
 };
-
-export default router;
