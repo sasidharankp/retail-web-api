@@ -1,7 +1,28 @@
-{
-    "name": "book",
+{"productData":{
+    "name": "Maths Book",
     "category":"books",
-    "description": "maths 2",
-    "price": 1.49,
+    "description": "Engineering Mathematics 1",
+    "price": 10.99,
     "image": "https://i.picsum.photos/id/1010/5184/3456.jpg"
+},
+"userData":{
+    "email":"sheldon@gmail.com",
+    "username":"sheldon",
+    "password":"bazinga",
+    "name": {
+        "firstname":"Sheldon",
+        "lastname":"Cooper"
+    },
+    "address": {
+        "city":"Texas",
+        "street":"south street",
+        "number": 3,
+        "zipcode":"91001",
+        "geolocation": {
+            "lat":"-46.3159",
+            "long":"71.1496"
+        }
+    },
+    "phone":"1-570-236-7033"
+    }
 }
