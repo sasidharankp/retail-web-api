@@ -7,7 +7,7 @@ module.exports={
 	'overrides': [{
 		'files': ['*.test.*'],
 		'env': {
-			'jest/globals': true,
+			'mocha': true,
 		},
 		'plugins': [
 			'jest',
