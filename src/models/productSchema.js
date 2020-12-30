@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const productSchema = Schema({
-	id:{
+	productId:{
 		type:Number,
-		required:true
+		required:true,
+		unique:true
 	},
 	name: {
 		type:String,

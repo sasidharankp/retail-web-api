@@ -24,5 +24,14 @@
         }
     },
     "phone":"1-570-236-7033"
+    },
+    "cartData":{
+        "userId":1,
+        "products": [
+            {
+                "productId": 16,
+                "quantity": 1
+            }
+        ]
     }
 }
