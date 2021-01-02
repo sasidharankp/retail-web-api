@@ -34,7 +34,7 @@ describe('/carts Routes', () => {
 				testCartId=res.body.cartId;
 				done();
 			});
-	});
+	}).timeout(5000);
   
 	it('it should GET all the Carts', (done) => {
 		chai.request(server)
