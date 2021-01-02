@@ -18,10 +18,8 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-      # - name: Test printing your secret (Remove this step in production)
-      #   run: cat .env.dev
-      - name: Print files in root
-        run: ./print.sh
+      - name: Test printing your secret (Remove this step in production)
+        run: cat .env.dev
      
   # build:
   #   runs-on: ubuntu-latest
