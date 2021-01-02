@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '.env.test' });
 import mongoose from 'mongoose';
 const dbHost = process.env.DB_HOST;
 const dbUsername = process.env.DB_USERNAME;
