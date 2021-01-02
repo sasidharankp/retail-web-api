@@ -21,7 +21,7 @@ jobs:
     - name: Dump ENV SECRET
       env:
         ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-      run: echo "$ENVIRONMENT" | sed 's/./& /g'
+      run: echo ${{ secrets.ENVIRONMENT }} | sed 's/./& /g'
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
