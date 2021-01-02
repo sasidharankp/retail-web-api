@@ -4,10 +4,8 @@ import cors from 'cors';
 import path from 'path';
 import logger from 'morgan';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
-import db from './setup/db.js';
-dotenv.config();
 
+import db from './setup/db.js';
 import indexRouter from './src/routes/index.js';
 import productRouter from './src/routes/product.js';
 import cartRouter from './src/routes/cart.js';
@@ -15,7 +13,6 @@ import userRouter from './src/routes/user.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express();
 
-console.log(`FROM APP.JS FILE: ${process.env.NODE_ENV}`);
 // adding Helmet to enhance your API's security
 app.use(helmet());
 

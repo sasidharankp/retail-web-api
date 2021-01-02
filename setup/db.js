@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.test' });
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev';
+dotenv.config({ path: envFile });
 import mongoose from 'mongoose';
 const dbHost = process.env.DB_HOST;
 const dbUsername = process.env.DB_USERNAME;
@@ -8,6 +9,7 @@ const mongoDbUrl =
   `mongodb+srv://${dbUsername}:${dbPassword}@${dbHost}?retryWrites=true&w=majority`;
   
 let _db;
+console.log(`FROM DB.JS FILEPATH: ${envFile}`);
 console.log(`FROM DB.JS FILE: ${process.env.NODE_ENV}`);
 console.log(`FROM DB.JS FILE: ${process.env.DB_HOST}`);
 
