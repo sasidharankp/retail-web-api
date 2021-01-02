@@ -5,25 +5,24 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ experiments ]
   pull_request:
     branches: [ main ]
-
 jobs:
-  build:
-
+  decrypt-secrets-test:
+    name: lint check and test node js app
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [13.x]
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: yarn install --frozen-lockfile
-    - run: yarn lint
-    - run: yarn test
+      - uses: actions/checkout@v2
+      - name: Decrypt large secret
+        run: ./.github/scripts/decrypt_secret.sh
+        env:
+          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn test

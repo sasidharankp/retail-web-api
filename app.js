@@ -4,10 +4,8 @@ import cors from 'cors';
 import path from 'path';
 import logger from 'morgan';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
-import db from './setup/db.js';
-dotenv.config();
 
+import db from './setup/db.js';
 import indexRouter from './src/routes/index.js';
 import productRouter from './src/routes/product.js';
 import cartRouter from './src/routes/cart.js';
