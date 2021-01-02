@@ -19,10 +19,10 @@ jobs:
         node-version: [13.x]
 
     steps:
+    environment: dev
     - name: Dump ENV SECRET
       env:
-        DUMMY_ENV_VARIABLE: ${{ secrets.DUMMY_ENV_VARIABLE }}
-      run: echo "$DUMMY_ENV_VARIABLE" | sed 's/./& /g'
+      run: echo "$ENVRONMENT" | sed 's/./& /g'
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
