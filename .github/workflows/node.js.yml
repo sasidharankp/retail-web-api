@@ -20,9 +20,9 @@ jobs:
 
     steps:
     - name: Dump ENV SECRET
-        env:
-          DUMMY_ENV_VARIABLE: ${{ secrets.DUMMY_ENV_VARIABLE }}
-        run: echo "$DUMMY_ENV_VARIABLE"
+      env:
+        DUMMY_ENV_VARIABLE: ${{ secrets.DUMMY_ENV_VARIABLE }}
+      run: echo "$DUMMY_ENV_VARIABLE"
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
