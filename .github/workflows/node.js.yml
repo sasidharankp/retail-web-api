@@ -8,8 +8,6 @@ on:
     branches: [ experiments ]
   pull_request:
     branches: [ main ]
-
-environment: dev
 jobs:
   build:
 
@@ -22,7 +20,8 @@ jobs:
     steps:
     - name: Dump ENV SECRET
       env:
-      run: echo "$ENVIRONMENT" | sed 's/./& /g'
+        ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+      run: echo "ENVIRONMENT" | sed 's/./& /g'
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
