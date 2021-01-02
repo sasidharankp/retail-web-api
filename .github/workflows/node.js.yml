@@ -22,7 +22,7 @@ jobs:
     - name: Dump ENV SECRET
       env:
         DUMMY_ENV_VARIABLE: ${{ secrets.DUMMY_ENV_VARIABLE }}
-      run: echo "$DUMMY_ENV_VARIABLE"
+      run: echo "secret=$DUMMY_ENV_VARIABLE"
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -30,4 +30,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: yarn install --frozen-lockfile
     - run: yarn lint
-    - run: yarn test
+    # - run: yarn test
