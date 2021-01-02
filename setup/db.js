@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-const envFile = process.env.NODE_ENV ? `../.env.${process.env.NODE_ENV}` : '../.env.dev';
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev';
 const result = dotenv.config({ path: envFile });
 
 if (result.error) {
@@ -19,6 +19,15 @@ let _db;
 console.log(`FROM DB.JS FILEPATH: ${envFile}`);
 console.log(`FROM DB.JS NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`FROM DB.JS DB_HOST: ${process.env.DB_HOST}`);
+
+const testFolder = './';
+import fs from 'fs';
+
+fs.readdir(testFolder, (err, files) => {
+	files.forEach(file => {
+		console.log(file);
+	});
+});
 
 const initDb = (callback) => {
 	if (_db) {
