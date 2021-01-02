@@ -45,7 +45,6 @@ export function addUser(req, res) {
 			userCount = count;
 		})
 			.then(() => {
-				console.log(req.body.name.firstname);
 				const userinfo = new userModel({
 					userId: userCount + 1,
 					email:req.body.email,

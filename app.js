@@ -5,7 +5,7 @@ import path from 'path';
 import logger from 'morgan';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-
+import db from './setup/db.js';
 dotenv.config();
 
 import indexRouter from './src/routes/index.js';
@@ -65,4 +65,14 @@ app.all('*', (req, res) => {
 		message: 'Route Does Not Exist',
 	});
 });
+
+/**
+ * initialise and connect to DB
+ */
+db.initDb((err) => {
+	if (err) {
+		console.log(err);
+	}
+});
+
 export default app;

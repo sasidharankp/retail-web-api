@@ -6,7 +6,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import app from '../app.js';
-import db from '../setup/db.js';
 import debug from 'debug';
 import https from 'https';
 import fs from 'fs';
@@ -33,16 +32,10 @@ const server = https.createServer({ key,
 	cert }, app);
 
 /**
- * initialise and connect to DB and start listening on port
+ * Listen on provided port, on all network interfaces.
  */
-db.initDb((err) => {
-	if (err) {
-		console.log(err);
-	} else {
-		server.listen(port);
-	}
-});
 
+server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 

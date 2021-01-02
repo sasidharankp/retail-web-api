@@ -25,7 +25,10 @@ const initDb = (callback) => {
 		catch((err) => {
 			callback(err);
 		});
+	mongoose.set('useNewUrlParser', true);
 	mongoose.set('useFindAndModify', false);
+	mongoose.set('useCreateIndex', true);
+		
 };
 
 const getDb = () => {

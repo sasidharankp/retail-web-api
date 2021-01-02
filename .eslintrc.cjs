@@ -10,28 +10,11 @@ module.exports={
 			'mocha': true,
 		},
 		'plugins': [
-			'jest',
+			'mocha',
 		],
 		'rules': {
-			'one-var': ['error', 'never'],
-			'lodash/prefer-lodash-method': [2, {
-				'ignoreMethods': ['find', 'forEach'],
-			}],
-			'@typescript-eslint/no-non-null-assertion': 'off',
-			'dot-notation': 'off',
-			'jest/expect-expect': 'warn',
-			'jest/no-commented-out-tests': 'error',
-			'jest/no-disabled-tests': 'error',
-			'jest/no-focused-tests': 'error',
-			'jest/no-identical-title': 'error',
-			'jest/no-jasmine-globals': 'warn',
-			'jest/no-jest-import': 'error',
-			'jest/no-mocks-import': 'error',
-			'jest/no-standalone-expect': 'error',
-			'jest/no-test-prefixes': 'error',
-			'jest/valid-describe': 'error',
-			'jest/valid-expect': 'error',
-			'jest/valid-expect-in-promise': 'error',
+			'mocha/no-skipped-tests': 'error',
+			'mocha/no-exclusive-tests': 'error'
 		},
 	},
 	{

@@ -85,9 +85,8 @@ export const addProduct = (req, res) => {
 					category: req.body.category,
 				});
 				productInfo.save()
-					.then(result => res.json(result))
+					.then(result => res.status(200).json(result))
 					.catch(error => console.log(error));
-				res.status(200).json(productInfo);
 			});
 	}
 };
