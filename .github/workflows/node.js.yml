@@ -20,7 +20,7 @@ jobs:
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
       - name: Test printing your secret (Remove this step in production)
-        run: cat .env.test
+        run: cat .env
 
   build:
     runs-on: ubuntu-latest
