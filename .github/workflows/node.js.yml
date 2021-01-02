@@ -19,7 +19,9 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-     
+      - name: Test printing your secret (Remove this step in production)
+        run: cat Run cat .env.dev
+
   build:
     runs-on: ubuntu-latest
 
@@ -28,8 +30,6 @@ jobs:
         node-version: [13.x]
 
     steps:
-    - name: Dump ENV SECRET
-      run: env
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
