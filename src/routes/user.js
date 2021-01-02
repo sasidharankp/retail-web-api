@@ -7,7 +7,6 @@ router.get('/',getAllUsers);
 router.get('/:id',getUser);
 router.post('/',addUser);
 router.put('/:id',editUser);
-router.patch('/:id',editUser);
 router.delete('/:id',deleteUser);
 
 export default router;

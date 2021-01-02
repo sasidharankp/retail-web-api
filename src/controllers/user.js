@@ -5,7 +5,7 @@ export function getAllUsers(req, res) {
 	const sort = req.query.sort == 'desc' ? -1 : 1;
 
 	userModel.find()
-		.select(['-_id','-__v'])
+		.select(['-_id','-__v', '-password'])
 		.limit(limit)
 		.sort({userId: sort})
 		.then(result => {
@@ -17,7 +17,7 @@ export function getAllUsers(req, res) {
 export function getUser(req, res) {
 	const id = req.params.id;
 	userModel.findOne({userId:id})
-		.select(['-_id','-__v'])
+		.select(['-_id','-__v', '-password'])
 		.then((result) => {
 			if (!result) {
 				res.status(404).json({
@@ -67,10 +67,8 @@ export function addUser(req, res) {
 					phone:req.body.phone
 				});
 				userinfo.save()
-					.then(result => res.json(result))
+					.then(result => res.status(200).json(result))
 					.catch(error => console.log(error));
-
-				res.status(200).json(userinfo);
 			});
 	}
 }
@@ -106,7 +104,7 @@ export function editUser(req, res) {
 	};
 
 	userModel.findOneAndUpdate({userId:id}, userInfo, {new: true})
-		.select(['-_id','-__v'])
+		.select(['-_id','-__v','-password'])
 		.then((result) => {
 			res.json(result);
 		})
@@ -122,7 +120,7 @@ export const deleteUser = (req, res) => {
 		});
 	} else {
 		userModel.findOneAndDelete({userId: req.params.id})
-			.select(['-_id','-__v'])
+			.select(['-_id','-__v', '-password'])
 			.then((result) => {
 				if(!result){
 					res.status(404).json({ message: 'User Not Found' });

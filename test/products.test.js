@@ -108,7 +108,7 @@ describe('Product Routes', () => {
 			});
 	});
   
-	it('it should DELETE a book given the id', (done) => {
+	it('it should DELETE a product given the id', (done) => {
 		chai.request(server)
 			.delete(`/products/${testProductId}`)
 			.end((err, res) => {
