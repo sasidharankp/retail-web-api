@@ -1,6 +1,13 @@
 import dotenv from 'dotenv';
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev';
-dotenv.config({ path: envFile });
+const result = dotenv.config({ path: envFile });
+ 
+if (result.error) {
+	throw result.error;
+}else{
+	console.log(result);
+}
+ 
 import mongoose from 'mongoose';
 const dbHost = process.env.DB_HOST;
 const dbUsername = process.env.DB_USERNAME;
