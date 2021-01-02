@@ -4,8 +4,6 @@ const result= dotenv.config({ path: envFile });
 
 if (result.error) {
 	throw result.error;
-}else{
-	console.log(result);
 }
  
 import mongoose from 'mongoose';
