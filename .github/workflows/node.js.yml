@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 jobs:
   decrypt-secrets-test:
-    name: Decrypt .env files
+    name: lint check and test node js app
     runs-on: ubuntu-latest
 
     steps:
