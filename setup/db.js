@@ -1,7 +1,7 @@
-const testFolder = './';
+
 import fs from 'fs';
 
-fs.readdir(testFolder, async (err, files) => {
+fs.readdir('./', async (err, files) => {
 	await files.forEach(file => {
 		console.log(file);
 	});
