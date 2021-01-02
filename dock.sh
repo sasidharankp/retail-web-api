@@ -1,9 +1,10 @@
-source .env 
+source .env.${NODE_ENV}
 
 DOCKER_IMAGE_TAG=$(git rev-parse --abbrev-ref HEAD)
 
 echo $DOCKER_USERNAME/$DOCKER_REGISTRY:$DOCKER_IMAGE_TAG
 
 docker build -t $DOCKER_USERNAME/$DOCKER_REGISTRY:$DOCKER_IMAGE_TAG .
-docker run --env-file .env -p 443:5000 -it $DOCKER_USERNAME/$DOCKER_REGISTRY:$DOCKER_IMAGE_TAG
+docker run -e NODE_ENV=$NODE_ENV -p 443:$PORT -it $DOCKER_USERNAME/$DOCKER_REGISTRY:$DOCKER_IMAGE_TAG
+# docker run --env-file .env -p 443:5000 -it $DOCKER_USERNAME/$DOCKER_REGISTRY:$DOCKER_IMAGE_TAG
 # docker run -p 5000:5000 -e DB_HOST=$DB_HOST -e DB_USERNAME=$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -it sasidharan/storeapi:main
