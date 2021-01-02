@@ -9,6 +9,7 @@ on:
   pull_request:
     branches: [ main ]
 
+environment: dev
 jobs:
   build:
 
@@ -19,10 +20,9 @@ jobs:
         node-version: [13.x]
 
     steps:
-    environment: dev
     - name: Dump ENV SECRET
       env:
-      run: echo "$ENVRONMENT" | sed 's/./& /g'
+      run: echo "$ENVIRONMENT" | sed 's/./& /g'
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
