@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 import mongoose from 'mongoose';
-const dbHost = process.env.DEV_DB_HOST;
-const dbUsername = process.env.DEV_DB_USERNAME;
-const dbPassword = process.env.DEV_DB_PASSWORD;
+const dbHost = process.env.DB_HOST;
+const dbUsername = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
 const mongoDbUrl =
   `mongodb+srv://${dbUsername}:${dbPassword}@${dbHost}?retryWrites=true&w=majority`;
   

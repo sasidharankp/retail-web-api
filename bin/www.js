@@ -4,7 +4,7 @@
  * module dependencies.
  */
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 import app from '../app.js';
 import debug from 'debug';
 import https from 'https';
