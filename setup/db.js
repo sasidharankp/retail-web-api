@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev';
+const envFile = process.env.NODE_ENV ? `./.env.${process.env.NODE_ENV}` : './.env.dev';
 dotenv.config({ path: envFile });
 import mongoose from 'mongoose';
 const dbHost = process.env.DB_HOST;
@@ -10,8 +10,8 @@ const mongoDbUrl =
   
 let _db;
 console.log(`FROM DB.JS FILEPATH: ${envFile}`);
-console.log(`FROM DB.JS FILE: ${process.env.NODE_ENV}`);
-console.log(`FROM DB.JS FILE: ${process.env.DB_HOST}`);
+console.log(`FROM DB.JS NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`FROM DB.JS DB_HOST: ${process.env.DB_HOST}`);
 
 const initDb = (callback) => {
 	if (_db) {
