@@ -1,23 +1,12 @@
-
-import fs from 'fs';
-
-fs.readdir('./', async (err, files) => {
-	await files.forEach(file => {
-		console.log(file);
-	});
-});
-
-
-
 import dotenv from 'dotenv';
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev';
-dotenv.config({ path: envFile });
+const result= dotenv.config({ path: envFile });
 
-// if (result.error) {
-// 	throw result.error;
-// }else{
-// 	console.log(result);
-// }
+if (result.error) {
+	throw result.error;
+}else{
+	console.log(result);
+}
  
 import mongoose from 'mongoose';
 const dbHost = process.env.DB_HOST;
@@ -27,9 +16,6 @@ const mongoDbUrl =
   `mongodb+srv://${dbUsername}:${dbPassword}@${dbHost}?retryWrites=true&w=majority`;
   
 let _db;
-console.log(`FROM DB.JS FILEPATH: ${envFile}`);
-console.log(`FROM DB.JS NODE_ENV: ${process.env.NODE_ENV}`);
-console.log(`FROM DB.JS DB_HOST: ${process.env.DB_HOST}`);
 
 const initDb = (callback) => {
 	if (_db) {
