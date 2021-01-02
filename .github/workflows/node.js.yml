@@ -18,25 +18,26 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-      - name: Test printing your secret (Remove this step in production)
-        run: cat .env.dev
+      # - name: Test printing your secret (Remove this step in production)
+      #   run: cat .env.dev
+      - name: Print files in root
+        run: ./print.sh
      
-  build:
+  # build:
+  #   runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [13.x]
 
-    strategy:
-      matrix:
-        node-version: [13.x]
-
-    steps:
-    - name: Dump ENV SECRET
-      run: env
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+  #   steps:
+  #   - name: Dump ENV SECRET
+  #     run: env
+  #   - uses: actions/checkout@v2
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
     # - run: yarn install --frozen-lockfile
     # - run: yarn lint
     # - run: yarn test
