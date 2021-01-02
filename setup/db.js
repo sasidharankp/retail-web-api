@@ -8,6 +8,8 @@ const mongoDbUrl =
   `mongodb+srv://${dbUsername}:${dbPassword}@${dbHost}?retryWrites=true&w=majority`;
   
 let _db;
+console.log(`FROM DB.JS FILE: ${process.env.NODE_ENV}`);
+console.log(`FROM DB.JS FILE: ${process.env.DB_HOST}`);
 
 const initDb = (callback) => {
 	if (_db) {

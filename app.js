@@ -15,6 +15,7 @@ import userRouter from './src/routes/user.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express();
 
+console.log(`FROM APP.JS FILE: ${process.env.NODE_ENV}`);
 // adding Helmet to enhance your API's security
 app.use(helmet());
 
