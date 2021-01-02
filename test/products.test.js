@@ -10,20 +10,20 @@ const expect=chai.expect;
 
 chai.use(chaiHttp);
 
-describe('Product Routes', () => {
+describe('/products Routes', () => {
 	let testProductId;
+	let productInfo = {
+		name: 'Light Saber',
+		category: 'Hobby',
+		description: 'Laser Light Saber, Blue Color',
+		price: 199,
+		image: 'https://i.picsum.photos/id/1010/5184/3456.jpg'
+	};
   
 	it('it should create a new product', (done) => {
-		let newProduct = {
-			name: 'Light Saber',
-			category: 'Hobby',
-			description: 'Laser Light Saber, Blue Color',
-			price: 199,
-			image: 'https://i.picsum.photos/id/1010/5184/3456.jpg'
-		};
 		chai.request(server)
 			.post('/products')
-			.send(newProduct)
+			.send(productInfo)
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
@@ -88,16 +88,10 @@ describe('Product Routes', () => {
   
 
 	it('it should update a product with given the id', (done) => {
-		let newProduct = {
-			name: 'Light Saber',
-			category: 'Hobby',
-			description: 'Laser Light Saber, Red Color',
-			price: 199,
-			image: 'https://i.picsum.photos/id/1010/5184/3456.jpg'
-		};
+		productInfo.description= 'Laser Light Saber, Red Color',
 		chai.request(server)
 			.put(`/products/${testProductId}`)
-			.send(newProduct)
+			.send(productInfo)
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')

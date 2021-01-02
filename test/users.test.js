@@ -10,7 +10,7 @@ const expect=chai.expect;
 
 chai.use(chaiHttp);
 
-describe('User Routes', () => {
+describe('/users Routes', () => {
 	let testUserId;
 	let userInfo = {
 		email:'testuser@email.com',

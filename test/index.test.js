@@ -4,7 +4,7 @@ import app from '../app.js';
 const expect=chai.expect;
 
 chai.use(chaiHttp);
-describe('App', () =>{
+describe('/ Index Routes', () =>{
 	it('has the default page', (done) => {
 		chai.request(app)
 			.get('/')

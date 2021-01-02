@@ -9,18 +9,17 @@ export function getAllCarts(req,res) {
 		.limit(limit)
 		.sort({id:sort})
 		.then(result=>{
-			res.json(result);
+			res.status(200).json(result);
 		})
 		.catch((error) => res.status(404).json({ message: error.message }));
 }
 
 export function getCartbyUserid(req,res) {
 	const id = req.params.id;
-
-	cartModel.find({userId:id})
+	cartModel.findOne({userId:id})
 		.select('-_id -products._id -__v -cartId')
 		.then(result=>{
-			if (!result.length) {
+			if (!result) {
 				res.status(404).json({
 					status: 'error',
 					message: 'No cart Found for User',
@@ -49,9 +48,7 @@ export function updateCart(req,res) {
 	};
 	cartModel.findOneAndUpdate({userId:id}, cartInfo, options)
 		.select('-_id -products._id -__v')
-		.then((result) => {
-			res.json(result);
-		})
+		.then((result) => res.status(200).json(result))
 		.catch((error) => res.status(500).json({ message: error.message }));
 }
 
@@ -65,9 +62,7 @@ export function deleteCart(req, res) {
 	} else {
 		cartModel.findOneAndDelete({userId:id})
 			.select('-_id -products._id')
-			.then(result=>{
-				res.json(result);
-			})
+			.then(result=> res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
 }
