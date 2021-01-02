@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ experiments ]
   pull_request:
     branches: [ main ]
 
@@ -19,6 +19,10 @@ jobs:
         node-version: [13.x]
 
     steps:
+    - name: Dump ENV SECRET
+        env:
+          DUMMY_ENV_VARIABLE: ${{ secrets.DUMMY_ENV_VARIABLE }}
+        run: echo "$DUMMY_ENV_VARIABLE"
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
