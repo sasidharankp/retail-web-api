@@ -19,8 +19,8 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-      - name: Test printing your secret (Remove this step in production)
-        run: ./.github/scripts/print.sh
+      # - name: Test printing your secret (Remove this step in production)
+      #   run: ./.github/scripts/print.sh
 
   # build:
   #   runs-on: ubuntu-latest
