@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  Build and Test Node JS code:
+  decrypt-secrets-test:
     name: Decrypt .env files
     runs-on: ubuntu-latest
 
