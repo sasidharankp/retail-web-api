@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+fs.readdir('./', (err, files) => {
+	files.forEach(file => {
+		console.log(file);
+	});
+});
+
 /**
  * module dependencies.
  */
