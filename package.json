@@ -5,13 +5,15 @@
   "type": "module",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test mocha --exit",
+    "test": "NODE_ENV=test nyc --reporter=text mocha --exit",
+    "coverage": "codecov --token=235d2ddf-64eb-45b7-b40e-a8e0a51e05c6",
     "lint": "eslint --cache --ext '.js,.json' .",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
     "chai": "^4.2.0",
     "chai-http": "4.3.0",
+    "codecov": "^3.8.1",
     "cors": "^2.8.5",
     "debug": "4.3.1",
     "dotenv": "^8.2.0",
@@ -21,6 +23,7 @@
     "mocha": "8.2.1",
     "mongoose": "^5.11.0",
     "morgan": "^1.10.0",
+    "nyc": "^15.1.0",
     "pug": "3.0.0"
   },
   "devDependencies": {
