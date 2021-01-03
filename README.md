@@ -7,13 +7,17 @@
 A set of REST endpoints to manage an online store.
 Perform Crud Operations on Products
 Place and Cancel Orders
+>Deployed using Github Actions into Azure WebApps
+# Root URL: [https://storeapi.azurewebsites.net/](https://storeapi.azurewebsites.net/) 
 
 # TechStack
 -   JavaScript
 -   Node 13.X
 -   Express
 -   Mongo
-
+-   Github Actions
+-   Azure
+-   Mocha
 
 ## Manage .env Files
 
