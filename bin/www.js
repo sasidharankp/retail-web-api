@@ -6,19 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 import app from '../app.js';
 import debug from 'debug';
-<<<<<<< Updated upstream
-// import https from 'https';
 import http from 'http';
-// import fs from 'fs';
-
-/**
- * read keys and cert files for HTTPS server
- */
-// const key = fs.readFileSync('./certs/key.pem');
-// const cert = fs.readFileSync('./certs/cert.pem');
-=======
-import http from 'http';
->>>>>>> Stashed changes
 
 /**
  * get port from environment and store in Express.
@@ -29,16 +17,6 @@ const port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 /**
-<<<<<<< Updated upstream
- * create HTTPS server.
- */
-
-// const server = https.createServer({ key,
-// 	cert }, app);
-
-/**
-=======
->>>>>>> Stashed changes
  * create HTTP server.
  */
 
