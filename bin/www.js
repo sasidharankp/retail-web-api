@@ -1,11 +1,4 @@
 #!/usr/bin/env node
-
-fs.readdir('./', (err, files) => {
-	files.forEach(file => {
-		console.log(file);
-	});
-});
-
 /**
  * module dependencies.
  */
@@ -13,14 +6,15 @@ import dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 import app from '../app.js';
 import debug from 'debug';
-import https from 'https';
-import fs from 'fs';
+// import https from 'https';
+import http from 'http';
+// import fs from 'fs';
 
 /**
  * read keys and cert files for HTTPS server
  */
-const key = fs.readFileSync('./certs/key.pem');
-const cert = fs.readFileSync('./certs/cert.pem');
+// const key = fs.readFileSync('./certs/key.pem');
+// const cert = fs.readFileSync('./certs/cert.pem');
 
 /**
  * get port from environment and store in Express.
@@ -34,8 +28,14 @@ app.set('port', port);
  * create HTTPS server.
  */
 
-const server = https.createServer({ key,
-	cert }, app);
+// const server = https.createServer({ key,
+// 	cert }, app);
+
+/**
+ * create HTTP server.
+ */
+
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
