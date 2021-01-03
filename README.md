@@ -1,8 +1,8 @@
-# retail-web-api
+# Retail Web API
+
 
 [![Code Coverage](https://codecov.io/gh/sasidharankp/retail-web-api/branch/main/graph/badge.svg)](https://codecov.io/gh/sasidharankp/retail-web-api)
-[![Tests](https://github.com/sasidharankp/retail-web-api/workflows/Tests/badge.svg?branch=main)](https://github.com/sasidharankp/retail-web-api/actions?query=workflow%3ATests)
-
+[![Continuous Integration](https://github.com/sasidharankp/retail-web-api/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/sasidharankp/retail-web-api/actions?query=workflow%3A%22Continuous+Integration%22)
 
 A set of REST endpoints to manage an online store.
 Perform Crud Operations on Products
