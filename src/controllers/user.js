@@ -68,7 +68,12 @@ export function addUser(req, res) {
 				});
 				userinfo.save()
 					.then(result => res.status(200).json(result))
-					.catch(error => console.log(error));
+					.catch(error => {if(error.code==11000){
+						const errorKey=error.keyValue;
+						res.status(500).json({ message: `User with ${Object.keys(errorKey)} : ${Object.values(errorKey)}  Already Exists!`});
+					}else{
+						res.status(500).json({ message: error.message });
+					}});
 			});
 	}
 }
