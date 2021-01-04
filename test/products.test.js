@@ -5,6 +5,9 @@ import  chai  from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app.js';
 
+import {products, productInfo} from '../fixtures/products.js';
+import productModel from '../src/models/productSchema.js';
+
 const expect=chai.expect;
 // const should=chai.should;
 
@@ -12,14 +15,33 @@ chai.use(chaiHttp);
 
 describe('/products Routes', () => {
 	let testProductId;
-	let productInfo = {
-		name: 'Light Saber',
-		category: 'Hobby',
-		description: 'Laser Light Saber, Blue Color',
-		price: 199,
-		image: 'https://i.picsum.photos/id/1010/5184/3456.jpg'
-	};
-  
+
+	it('Should check If the Collecion Is empty', (done) => {
+		productModel.estimatedDocumentCount()
+			.then((result) => {
+				expect(result).to.eql(0);
+				done();
+			})
+			.catch((error) => console.log(error));
+	});
+	
+	it('it should add multiple products at once', (done) => {
+		chai.request(server)
+			.post('/products/bulk')
+			.send(products)
+			.end((err, res) => {
+				expect(res.status).to.deep.eql(200);
+				expect(res.body)
+					.to.be.an('array').that.is.not.empty  
+					.not.to.be.an('object');
+				expect(res.body[0]).to.be.an('object')
+					.that.have.all.keys([ 'productId', 'category', 'name','quantity', 'price', 'description', 'image', '_id', '__v' ]);
+				expect(res.body).to.not.have.property('errors');
+				testProductId=res.body.productId;
+				done();
+			});
+	});
+
 	it('it should create a new product', (done) => {
 		chai.request(server)
 			.post('/products')
@@ -27,13 +49,13 @@ describe('/products Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'description', 'image', '_id', '__v' ]);
+					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'quantity', 'description', 'image', '_id', '__v' ]);
 				expect(res.body).to.not.have.property('errors');
 				testProductId=res.body.productId;
 				done();
 			});
 	});
-  
+
 	it('it should GET all the Products', (done) => {
 		chai.request(server)
 			.get('/products')
@@ -55,7 +77,7 @@ describe('/products Routes', () => {
 				expect(err).to.be.a('null');
 				expect(res.body)
 					.to.be.an('object')
-					.to.includes.all.keys([ 'productId', 'category', 'name', 'price', 'description' ]);
+					.to.includes.all.keys([ 'productId', 'category', 'name', 'price','quantity', 'description','image' ]);
 				done();
 			});
 	});
@@ -86,7 +108,6 @@ describe('/products Routes', () => {
 			});
 	});
   
-
 	it('it should update a product with given the id', (done) => {
 		productInfo.description= 'Laser Light Saber, Red Color',
 		chai.request(server)
@@ -95,7 +116,7 @@ describe('/products Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'description', 'image' ]);
+					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'quantity', 'description', 'image' ]);
 				expect(res.body).to.have.property('description', 'Laser Light Saber, Red Color');
 				expect(res.body).to.not.have.property('errors');
 				done();
@@ -108,11 +129,32 @@ describe('/products Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.to.have.all.keys([ 'productId', 'category', 'name', 'price', 'description', 'image' ])
+					.to.have.all.keys([ 'productId', 'category', 'name', 'price', 'quantity', 'description', 'image' ])
 					.to.not.have.keys(['_id', '__v']);
 				expect(res.body).to.have.property('productId', testProductId);
 				expect(res.body).to.not.have.property('errors');
 				done();
 			});
 	});
+	
+	before(() => {
+		productModel.estimatedDocumentCount()
+			.then((result) => {
+				if(result>0){
+					clearDb(productModel);
+				}
+			})
+			.catch((error) => console.log(error));
+	});
+
+	after(() => {
+		clearDb(productModel);
+	});
+
 });
+
+const clearDb=(model)=>{
+	model.deleteMany({})
+		.then((result) => console.log(result.deletedCount))
+		.catch((error) => console.log(error));
+};

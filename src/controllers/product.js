@@ -2,12 +2,13 @@ import productModel from '../models/productSchema.js';
 
 export const getAllProducts = (req, res) => {
 	const limit = Number(req.query.limit) || 0;
-	const sort = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
+	const sortKey = (req.query.key == 'price') ? 'price' : (req.query.key == 'quantity') ? 'quantity' : 'productId' ;
+	const sortOrder = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
 
 	productModel.find()
 		.select(['-_id','-__v'])
 		.limit(limit)
-		.sort({ price: sort })
+		.sort({ [sortKey]: sortOrder })
 		.then((result) => {
 			res.status(200).json(result);
 		})
@@ -80,6 +81,7 @@ export const addProduct = (req, res) => {
 					productId: productCount + 1,
 					name: req.body.name,
 					price: req.body.price,
+					quantity:req.body.quantity,
 					description: req.body.description,
 					image: req.body.image,
 					category: req.body.category,
@@ -88,6 +90,20 @@ export const addProduct = (req, res) => {
 					.then(result => res.status(200).json(result))
 					.catch((error) => res.status(500).json({ message: error.message }));
 			});
+	}
+};
+
+export const bulkAdd = (req, res) => {
+	if (typeof req.body == undefined) {
+		res.json({
+			status: 'error',
+			message: 'data is undefined',
+		});
+	} else {
+		productModel.insertMany(req.body)
+			.then(result => res.status(200).json(result))
+			.catch((error) => res.status(500).json({ message: error.message }));
+
 	}
 };
   
@@ -101,6 +117,7 @@ export const editProduct = (req, res) => {
 	} 
 	const productInfo= {
 		name: req.body.name,
+		quantity:req.body.quantity,
 		price: req.body.price,
 		description: req.body.description,
 		image: req.body.image,
