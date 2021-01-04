@@ -1,5 +1,4 @@
 import cartModel from '../models/cartSchema.js';
-import userModel from '../models/userSchema.js';
 import mongoose from 'mongoose';
 
 export function getAllCarts(req,res) {
