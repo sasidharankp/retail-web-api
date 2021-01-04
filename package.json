@@ -11,6 +11,7 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "chai": "^4.2.0",
     "chai-http": "4.3.0",
     "codecov": "^3.8.1",

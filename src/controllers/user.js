@@ -1,35 +1,45 @@
+import bcrypt from 'bcrypt';
+
 import userModel from '../models/userSchema.js';
+import mongoose from 'mongoose';
+import cartModel from '../models/cartSchema.js';
 
 export function getAllUsers(req, res) {
 	const limit = Number(req.query.limit) || 0;
 	const sort = req.query.sort == 'desc' ? -1 : 1;
 
 	userModel.find()
-		.select(['-_id','-__v', '-password'])
+		.select(['-_id','-__v'])
 		.limit(limit)
 		.sort({userId: sort})
 		.then(result => {
 			res.json(result);
 		})
-		.catch(error => console.log(error));
+		.catch((error) => res.status(500).json({ message: error.message }));
 }
 
 export function getUser(req, res) {
-	const id = req.params.id;
-	userModel.findOne({userId:id})
-		.select(['-_id','-__v', '-password'])
-		.then((result) => {
-			if (!result) {
-				res.status(404).json({
-					status: 'error',
-					message: 'User Not Found',
-					userId: `${id}`
-				});
-			}else{
-				res.status(200).json(result);
-			}
-		})
-		.catch((error) => res.status(404).json({ message: error.message }));
+	if (req.params.id == null || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+		res.json({
+			message: 'Please Check the User ID',
+		});
+	}else{
+		const id = req.params.id;
+		userModel.findOne({userId:id})
+			.select(['-_id','-__v'])
+			.then((result) => {
+				if (!result) {
+					res.status(404).json({
+						status: 'error',
+						message: 'User Not Found',
+						userId: `${id}`
+					});
+				}else{
+					res.status(200).json(result);
+				}
+			})
+			.catch((error) => res.status(404).json({ message: error.message }));
+	}
 }
 
 export function addUser(req, res) {
@@ -39,42 +49,51 @@ export function addUser(req, res) {
 			message: 'data is undefined',
 		});
 	} else {
-
-		let userCount = 0;
-		userModel.find().countDocuments(function (error, count) {
-			userCount = count;
-		})
+		const uniqueId=mongoose.Types.ObjectId();
+		const userinfo = new userModel({
+			_id: uniqueId,
+			userId: uniqueId,
+			email:req.body.email,
+			username:req.body.username,
+			password:bcrypt.hashSync(req.body.password, 5),
+			name:{
+				firstname:req.body.name.firstname,
+				lastname:req.body.name.lastname
+			},
+			address:{
+				city:req.body.address.city,
+				street:req.body.address.street,
+				number:req.body.address.number,
+				zipcode:req.body.address.zipcode,
+				geolocation: {
+					lat:req.body.address.geolocation.lat,
+					long:req.body.address.geolocation.long
+				}
+			},
+			phone:req.body.phone
+		});
+	
+		userinfo.save()
 			.then(() => {
-				const userinfo = new userModel({
-					userId: userCount + 1,
-					email:req.body.email,
-					username:req.body.username,
-					password:req.body.password,
-					name:{
-						firstname:req.body.name.firstname,
-						lastname:req.body.name.lastname
-					},
-					address:{
-						city:req.body.address.city,
-						street:req.body.address.street,
-						number:req.body.address.number,
-						zipcode:req.body.address.zipcode,
-						geolocation: {
-							lat:req.body.address.geolocation.lat,
-							long:req.body.address.geolocation.long
-						}
-					},
-					phone:req.body.phone
+			})
+			.then(() => {
+				const cartInfo =new cartModel({
+					_id:mongoose.Types.ObjectId(),
+					cartId:uniqueId,
+					user:uniqueId,
+					products:[]
 				});
-				userinfo.save()
+				cartInfo.save()
 					.then(result => res.status(200).json(result))
-					.catch(error => {if(error.code==11000){
-						const errorKey=error.keyValue;
-						res.status(500).json({ message: `User with ${Object.keys(errorKey)} : ${Object.values(errorKey)}  Already Exists!`});
-					}else{
-						res.status(500).json({ message: error.message });
-					}});
-			});
+					.catch((error) => res.status(500).json({ message: error.message }));
+			})
+			.catch(error => {if(error.code==11000){
+				const errorKey=error.keyValue;
+				res.status(500).json({ message: `User with ${Object.keys(errorKey)} : ${Object.values(errorKey)}  Already Exists!`});
+			}else{
+				res.status(500).json({ message: error.message });
+			}});
+
 	}
 }
 
@@ -90,7 +109,7 @@ export function editUser(req, res) {
 		userId: req.params.id,
 		email:req.body.email,
 		username:req.body.username,
-		password:req.body.password,
+		password:bcrypt.hashSync(req.body.password, 5),
 		name:{
 			firstname:req.body.name.firstname,
 			lastname:req.body.name.lastname
@@ -118,10 +137,9 @@ export function editUser(req, res) {
 }
 
 export const deleteUser = (req, res) => {
-	if (req.params.id == null) {
+	if (req.params.id == null || !mongoose.Types.ObjectId.isValid(req.params.id)) {
 		res.json({
-			status: 'error',
-			message: 'User ID cant be empty',
+			message: 'Please Check the User ID',
 		});
 	} else {
 		userModel.findOneAndDelete({userId: req.params.id})
@@ -129,9 +147,12 @@ export const deleteUser = (req, res) => {
 			.then((result) => {
 				if(!result){
 					res.status(404).json({ message: 'User Not Found' });
-				}else{
-					res.status(200).json(result);
 				}
+			})
+			.then(() => {
+				cartModel.findOneAndDelete({cartId: req.params.id})
+					.then(result => res.status(200).json(result))
+					.catch((error) => res.status(500).json({ message: error.message }));
 			})
 			.catch((error) => res.status(404).json({ message: error.message }));
 	}

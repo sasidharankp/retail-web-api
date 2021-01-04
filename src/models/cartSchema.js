@@ -2,19 +2,20 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 import productModel from './productSchema.js';
-import userModel from './userSchema.js';
 
 const cartSchema = new Schema({
+	_id:{
+		type:Schema.Types.ObjectId,
+		immutable:true
+	},
 	cartId:{
-		type:Number,
-		required:true,
+		type:Schema.Types.ObjectId,
 		immutable:true,
 		unique:true
 	},
-	userId:{
-		type:Schema.Types.Number,
-		ref:userModel,
-		required:true
+	user:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'user'
 	},
 	products:[
 		{
@@ -37,4 +38,5 @@ const cartSchema = new Schema({
 
 const cartModel = mongoose.model('cart', cartSchema);
 
-export default cartModel ;
+export default cartModel;
+

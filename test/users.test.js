@@ -5,34 +5,17 @@ import  chai  from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app.js';
 
+import {userInfo} from '../fixtures/users.js';
+import cartModel from '../src/models/cartSchema.js';
+import userModel from '../src/models/userSchema.js';
+
 const expect=chai.expect;
 // const should=chai.should;
 
 chai.use(chaiHttp);
 
 describe('/users Routes', () => {
-	let testUserId;
-	let userInfo = {
-		email:'testuser@email.com',
-		username:'testuser',
-		password:'test1234',
-		name:{
-			firstname:'testFirstName',
-			lastname:'testLastName'
-		},
-		address:{
-			city:'testCity',
-			street:'testStreet',
-			number:19,
-			zipcode:123456,
-			geolocation: {
-				lat:'-46.3159',
-				long:'71.1496'
-			}
-		},
-		phone:'1-570-236-7033'
-	};
-  
+	let testUserId;  
 	it('it should create a new User', (done) => {
 		chai.request(server)
 			.post('/users')
@@ -40,9 +23,9 @@ describe('/users Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.include.all.keys([ 'name', 'address', 'userId', 'email', 'username', 'phone', '_id','password' ]);
+					.that.include.all.keys([ '__v', '_id', 'cartId', 'createdAt', 'products', 'updatedAt','user' ]);
 				expect(res.body).to.not.have.property('errors');
-				testUserId=res.body.userId;
+				testUserId=res.body.user;
 				done();
 			});
 	});
@@ -61,6 +44,7 @@ describe('/users Routes', () => {
 	});
 
 	it('it should GET Only one User', (done) => {
+		console.log(testUserId)
 		chai.request(server)
 			.get(`/users/${testUserId}`)
 			.end((err, res) => {
@@ -110,11 +94,32 @@ describe('/users Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.to.have.all.keys([ 'name', 'address', 'userId', 'email', 'username', 'phone' ])
+					.to.have.all.keys([ '__v', '_id', 'cartId', 'createdAt', 'products', 'updatedAt','user' ])
 					.to.not.have.keys(['_id', '__v']);
-				expect(res.body).to.have.property('userId', testUserId);
+				expect(res.body).to.have.property('user', testUserId);
 				expect(res.body).to.not.have.property('errors');
 				done();
 			});
 	});
+	before(() => {
+		userModel.estimatedDocumentCount()
+			.then((result) => {
+				if(result>0){
+					clearDb(userModel);
+				}
+			})
+			.catch((error) => console.log(error));
+	});
+
+	after(() => {
+		clearDb(userModel);
+		clearDb(cartModel);
+	});
+
 });
+
+const clearDb=(model)=>{
+	model.deleteMany({})
+		.then((result) => console.log(result.deletedCount))
+		.catch((error) => console.log(error));
+};

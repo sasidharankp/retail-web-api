@@ -72,9 +72,9 @@ export const addProduct = (req, res) => {
 		});
 	} else {
 		let productCount = 0;
-		productModel.find()
-			.countDocuments(function (err, count) {
-				productCount = count;
+		productModel.estimatedDocumentCount()
+			.then((result) => {
+				productCount=result+1;
 			})
 			.then(() => {
 				const productInfo = new productModel({

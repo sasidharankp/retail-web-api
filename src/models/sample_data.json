@@ -25,6 +25,27 @@
     },
     "phone":"1-570-236-7033"
     },
+    "userData2":{
+        "name": {
+            "firstname": "sasi",
+            "lastname": "dharan"
+        },
+        "address": {
+            "geolocation": {
+                "lat": "-46.3159",
+                "long": "71.1496"
+            },
+            "city": "Texas",
+            "street": "south street",
+            "number": 3,
+            "zipcode": "91001"
+        },
+        "userId": 2,
+        "email": "sasi@gmail.com",
+        "password":"hello",
+        "username": "sasi",
+        "phone": "1-570-236-7033"
+    },
     "cartData":{
         "userId":1,
         "products": [

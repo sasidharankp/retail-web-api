@@ -1,11 +1,14 @@
 import cartModel from '../models/cartSchema.js';
+import userModel from '../models/userSchema.js';
+import mongoose from 'mongoose';
 
 export function getAllCarts(req,res) {
 	const limit = Number(req.query.limit) || 0;
 	const sort = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
     
 	cartModel.find()
-		.select('-_id -products._id -__v -cartId')
+		.populate('user')
+		.select('-_id -products._id -__v')
 		.limit(limit)
 		.sort({id:sort})
 		.then(result=>{
@@ -14,26 +17,40 @@ export function getAllCarts(req,res) {
 		.catch((error) => res.status(404).json({ message: error.message }));
 }
 
-export function getCartbyUserid(req,res) {
+export function getCartbyId(req,res) {
 	const id = req.params.id;
-	cartModel.findOne({userId:id})
-		.select('-_id -products._id -__v -cartId')
-		.then(result=>{
-			if (!result) {
-				res.status(404).json({
-					status: 'error',
-					message: 'No cart Found for User',
-					userId: `${id}`
-				});
-			}else{
-				res.status(200).json(result);
-			}
-		})
-		.catch((error) => res.status(500).json({ message: error.message }));
+	if(!mongoose.Types.ObjectId.isValid(id)){
+		res.status(500).json({ message: 'Invalid Cart Id' });
+	}else{
+		cartModel.findOne({cartId:id})
+			.select('-_id -products._id -__v')
+			.populate('user')
+			.then((result) => res.status(200).json(result))
+			.catch((error) => res.status(500).json({ message: error.message }));
+	}
+}
+
+export function createCart(req,res) {
+	const id = req.params.id;
+	if (req.params.id == null || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+		res.json({
+			message: 'Please Check the User ID',
+		});
+	}else{
+		const cartInfo =new cartModel({
+			_id:mongoose.Types.ObjectId(),
+			cartId:id,
+			user:id,
+			products:[]
+		});
+		cartInfo.save()
+			.then(result => res.status(200).json(result))
+			.catch((error) => res.status(500).json({ message: error.message }));
+	}
 }
 
 export function updateCart(req,res) {
-	const id = req.body.userId;
+	const id = req.params.id;
 	const options ={ upsert: true, new: true, setDefaultsOnInsert: true };
 	if (typeof req.body == undefined || id == null) {
 		res.json({
@@ -42,17 +59,15 @@ export function updateCart(req,res) {
 		});
 	} 
 	const cartInfo= {
-		cartId: id,
-		userId: id,
 		products:req.body.products
 	};
-	cartModel.findOneAndUpdate({userId:id}, cartInfo, options)
+	cartModel.findOneAndUpdate({cartId:id}, cartInfo, options)
 		.select('-_id -products._id -__v')
 		.then((result) => res.status(200).json(result))
 		.catch((error) => res.status(500).json({ message: error.message }));
 }
 
-export function deleteCart(req, res) {
+export function clearCart(req, res) {
 	const id = req.params.id;
 	if (id == null) {
 		res.json({
@@ -60,7 +75,7 @@ export function deleteCart(req, res) {
 			message: 'cart id should be provided'
 		});
 	} else {
-		cartModel.findOneAndDelete({userId:id})
+		cartModel.findOneAndUpdate({cartId:id},{products:[]})
 			.select('-_id -products._id')
 			.then(result=> res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
