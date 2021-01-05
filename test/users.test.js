@@ -52,7 +52,7 @@ describe('/users Routes', () => {
 				expect(err).to.be.a('null');
 				expect(res.body)
 					.to.be.an('object')
-					.to.includes.all.keys([ 'name', 'address', 'userId', 'email', 'username', 'phone' ]);
+					.to.includes.all.keys([ 'name', 'address', 'userId', 'email', 'username', 'phone', 'orders' ]);
 				done();
 			});
 	});
@@ -81,7 +81,7 @@ describe('/users Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.have.all.keys([ 'name', 'address', 'userId', 'email', 'username', 'phone' ]);
+					.that.have.all.keys([ 'name', 'address', 'userId', 'email', 'username', 'phone','orders' ]);
 				expect(res.body).to.have.property('email', 'testadmin@gmail.com');
 				expect(res.body).to.not.have.property('errors');
 				done();

@@ -27,6 +27,7 @@ export function getUser(req, res) {
 		const id = req.params.id;
 		userModel.findOne({userId:id})
 			.select(['-_id','-__v'])
+			.populate('orders','orderStatus orderId updatedAt -_id')
 			.then((result) => {
 				if (!result) {
 					res.status(404).json({

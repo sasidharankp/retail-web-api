@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import orderModel from '../models/orderSchema.js';
+import userModel from '../models/userSchema.js';
 
 export const getAllOrders = (req, res) => {
 	orderModel.find()
@@ -63,7 +64,7 @@ export const getOrderByOrderId = (req, res) => {
 };
 
 export const placeOrder = (req, res) => {
-	if (typeof req.body == undefined) {
+	if (typeof req.body == undefined || !mongoose.Types.ObjectId.isValid(req.body.userId)) {
 		res.json({
 			status: 'error',
 			message: 'Invalid Order Data',
@@ -79,8 +80,30 @@ export const placeOrder = (req, res) => {
 			
 		});
 
-		orderInfo.save()
-			.then(result => res.status(200).json(result))
+		userModel.exists({userId:userId})
+			.then((result)=>{
+				if(result){
+					orderInfo.save()
+						.then(orderResult => {
+							userModel.findByIdAndUpdate(
+								userId, 
+								{ $push: { orders: orderResult } },
+								{ new: true}
+							)
+								.then(() => {									
+									res.status(200).json({
+										orderId:orderResult.orderId,
+										status:orderResult.orderStatus,
+									});
+
+								});
+						});
+				}else{
+					res.status(200).json({
+						message:'User Does Not Exist!'
+					});
+				}
+			})
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
 };
@@ -127,8 +150,8 @@ export function cancelOrder(req, res) {
 			message: 'Order ID should be provided'
 		});
 	} else {
-		orderModel.findOneAndDelete({orderId:id})
-			.select('-_id -products._id')
+		orderModel.findOneAndUpdate({orderId:id},{orderStatus:'cancelled'},{new:true})
+			.select('orderStatus orderId updatedAt -_id')
 			.then(result=> res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
@@ -143,8 +166,14 @@ export function deleteOrder(req, res) {
 		});
 	} else {
 		orderModel.findOneAndDelete({orderId:id})
-			.select('-_id -products._id')
-			.then(result=> res.status(200).json(result))
+			.select('-_id orderId')
+			.then(result=> {
+				const message= (result)? `Successfully Deleted Order with ID: ${result.orderId}`:`Unable to Find any Orders with ID: ${id}`;
+				res.status(404).json(
+					{ 
+						message: message
+					});
+				res.status(200).json(result);})
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
 }

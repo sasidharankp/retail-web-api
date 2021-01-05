@@ -47,7 +47,15 @@ const userSchema = new Schema({
 			long:String
 		}
 	},
-	phone:String
+	phone:{
+		type:String
+	},
+	orders:[
+		{
+			type:Schema.Types.ObjectId,
+			ref:'order',
+		}
+	]
 });
 
 const userModel = mongoose.model('user', userSchema);
