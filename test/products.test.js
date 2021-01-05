@@ -139,7 +139,7 @@ describe('/products Routes', () => {
 
 	it('it should DELETE all Products in the Collection', (done) => {
 		chai.request(server)
-			.delete('/products/clear/all')
+			.delete('/products/bulk')
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
