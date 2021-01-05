@@ -1,0 +1,837 @@
+{
+	"info": {
+		"_postman_id": "eb35b3a3-668b-4462-9898-68b0786cc415",
+		"name": "Retail Web API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Orders API",
+			"item": [
+				{
+					"name": "Get all Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders By Order Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/orders/status?status=confirmed&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "confirmed"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "allowed values in query params\nstatus = ['confirmed', 'shipped', 'delivered', 'cancelled']\nlimit= Number"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by Order ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/orders/5ff48406c5af1b13103b4f45",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders",
+								"5ff48406c5af1b13103b4f45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place New Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"userId\":\"5ff47c06fc08445df4d2d3f6\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/orders/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders",
+								""
+							]
+						},
+						"description": "request Body : {\"userId\":\"5ff47c06fc08445df4d2d3f6\"}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Status by Order Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/orders/status/5ff48406c5af1b13103b4f45?status=shipped",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders",
+								"status",
+								"5ff48406c5af1b13103b4f45"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "shipped"
+								}
+							]
+						},
+						"description": "allowed values in query params\nstatus = ['confirmed', 'shipped', 'delivered', 'cancelled']"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order By Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/orders/cancel/5ff4d0ad2739f3aa7ab1184e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders",
+								"cancel",
+								"5ff4d0ad2739f3aa7ab1184e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order by Order Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/orders/5ff4a27fcff2a6e88a325dc5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"orders",
+								"5ff4a27fcff2a6e88a325dc5"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Products API",
+			"item": [
+				{
+					"name": "Get Product by Product Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/5ff477a4f2d3264b9fb3af51",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"5ff477a4f2d3264b9fb3af51"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/?sort=desc&limit=3&key=price",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								""
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "desc"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								},
+								{
+									"key": "key",
+									"value": "price"
+								}
+							]
+						},
+						"description": "allowed values in query params\nsort:[asc,desc] //defaults to asc\nkey:[price,stock] //defaults to productId\nlimit= Number"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Categories",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products In Category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/category/books?limit=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"category",
+								"books"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						},
+						"description": "allowed values in query params\nlimit= Number"
+					},
+					"response": []
+				},
+				{
+					"name": "Add new Product by Product Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"test Product\",\n        \"price\": 1341.99,\n        \"stock\": 2,\n        \"description\": \"test Car\",\n        \"image\": \"https://i.picsum.photos/id/1071/3000/1996.jpg\",\n        \"category\": \"automobiles\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Multiple Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"name\": \"religious book\",\n        \"stock\": 5,\n        \"price\": 1.19,\n        \"description\": \"Holy bible\",\n        \"image\": \"https://i.picsum.photos/id/1010/5184/3456.jpg\",\n        \"category\": \"books\"\n    },\n    {\n        \"name\": \"Shoes\",\n        \"price\": 9.99,\n        \"stock\": 4,\n        \"description\": \"Sneakers\",\n        \"image\": \"https://i.picsum.photos/id/103/2592/1936.jpg\",\n        \"category\": \"footwear\"\n    },\n    {\n        \"name\": \"Strawberry\",\n        \"price\": 4.49,\n        \"stock\": 6,\n        \"description\": \"Fresh Strawberry box\",\n        \"image\": \"https://i.picsum.photos/id/1080/6858/4574.jpg\",\n        \"category\": \"fresh produce\"\n    },\n    {\n        \"name\": \"Dream Catcher\",\n        \"price\": 4.99,\n        \"stock\": 3,\n        \"description\": \"Feathers dream catcher\",\n        \"image\": \"https://i.picsum.photos/id/104/3840/2160.jpg\",\n        \"category\": \"gifts\"\n    },\n    {\n        \"name\": \"book\",\n        \"price\": 6.99,\n        \"stock\": 12,\n        \"description\": \"science\",\n        \"image\": \"https://i.picsum.photos/id/1010/5184/3456.jpg\",\n        \"category\": \"books\"\n    },\n    {\n        \"name\": \"Glass Jar\",\n        \"price\": 7.49,\n        \"stock\": 30,\n        \"description\": \"Designer jar\",\n        \"image\": \"https://i.picsum.photos/id/1068/7117/4090.jpg\",\n        \"category\": \"home and kitchen\"\n    },\n    {\n        \"name\": \"Shoes\",\n        \"price\": 99.99,\n        \"stock\": 2,\n        \"description\": \"Ballet Shoes\",\n        \"image\": \"https://i.picsum.photos/id/21/3008/2008.jpg\",\n        \"category\": \"footwear\"\n    },\n    {\n        \"name\": \"Tux\",\n        \"price\": 199.89,\n        \"stock\": 0,\n        \"description\": \"Black color Tuxedo\",\n        \"image\": \"https://i.picsum.photos/id/1059/7360/4912.jpg\",\n        \"category\": \"clothing\"\n    },\n    {\n        \"name\": \"Kids Cycle\",\n        \"price\": 199.99,\n        \"stock\": 1,\n        \"description\": \"Kids tricycle\",\n        \"image\": \"https://i.picsum.photos/id/146/5184/3456.jpg\",\n        \"category\": \"kids\"\n    },\n    {\n        \"name\": \"Skate Board\",\n        \"price\": 299.5,\n        \"stock\": 15,\n        \"description\": \"Black colour skate board\",\n        \"image\": \"https://i.picsum.photos/id/157/6211/4862.jpg\",\n        \"category\": \"hobby\"\n    },\n    {\n        \"name\": \"Guitar\",\n        \"price\": 399.9,\n        \"stock\": 3,\n        \"description\": \"Vintage String Guitar\",\n        \"image\": \"https://i.picsum.photos/id/145/4288/2848.jpg\",\n        \"category\": \"hobby\"\n    },\n    {\n        \"name\": \"watch\",\n        \"price\": 749.9,\n        \"stock\": 4,\n        \"description\": \"Vintage Watch\",\n        \"image\": \"https://i.picsum.photos/id/175/2896/1944.jpg\",\n        \"category\": \"watches\"\n    },\n    {\n        \"name\": \"Laptop\",\n        \"price\": 999.01,\n        \"stock\": 2,\n        \"description\": \"Apple MacBook Air\",\n        \"image\": \"https://i.picsum.photos/id/2/5616/3744.jpg\",\n        \"category\": \"electronics\"\n    },\n    {\n        \"name\": \"Laptop\",\n        \"price\": 1499.99,\n        \"stock\": 5,\n        \"description\": \"Apple MacBook Pro\",\n        \"image\": \"https://i.picsum.photos/id/119/3264/2176.jpg\",\n        \"category\": \"electronics\"\n    },\n    {\n        \"name\": \"Vehicle\",\n        \"price\": 5999.99,\n        \"stock\": 0,\n        \"description\": \"Vintage RV\",\n        \"image\": \"https://i.picsum.photos/id/183/2316/1544.jpg\",\n        \"category\": \"automobiles\"\n    },\n    {\n        \"name\": \"Vehicle\",\n        \"price\": 7999.99,\n        \"stock\": 1,\n        \"description\": \"Vintage Car\",\n        \"image\": \"https://i.picsum.photos/id/1071/3000/1996.jpg\",\n        \"category\": \"automobiles\"\n    },\n    {\n        \"name\": \"Smartphone\",\n        \"price\": 999,\n        \"stock\": 10,\n        \"description\": \"iPhone XR\",\n        \"image\": \"https://i.picsum.photos/id/1010/5184/3456.jpg\",\n        \"category\": \"electronics\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/bulk",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"bulk"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Product data by Product Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"Vehicle\",\n        \"price\": 7999.99,\n        \"stock\": 2,\n        \"description\": \"Vintage Car\",\n        \"image\": \"https://i.picsum.photos/id/1071/3000/1996.jpg\",\n        \"category\": \"automobiles\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/5ff4dd8a7ca46ffdc78cd18e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"5ff4dd8a7ca46ffdc78cd18e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Single Product by Product Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/5ff4debb7ca46ffdc78cd190",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"5ff4debb7ca46ffdc78cd190"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all Products in Collection",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/products/bulk",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"products",
+								"bulk"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users API",
+			"item": [
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by User ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/5ff47c06fc08445df4d2d3f6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"5ff47c06fc08445df4d2d3f6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"sheldon@gmail.com\",\n    \"username\":\"sheldon\",\n    \"password\":\"bazinga\",\n    \"name\": {\n        \"firstname\":\"Sheldon\",\n        \"lastname\":\"Cooper\"\n    },\n    \"address\": {\n        \"city\":\"Texas\",\n        \"street\":\"south street\",\n        \"number\": 3,\n        \"zipcode\":\"91001\",\n        \"geolocation\": {\n            \"lat\":\"-46.3159\",\n            \"long\":\"71.1496\"\n        }\n    },\n    \"phone\":\"1-570-236-7033\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit existing User by User Id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"missy@gmail.com\",\n    \"username\":\"missy\",\n    \"password\":\"turtle\",\n    \"name\": {\n        \"firstname\":\"missy\",\n        \"lastname\":\"Cooper\"\n    },\n    \"address\": {\n        \"city\":\"Texas\",\n        \"street\":\"south street\",\n        \"number\": 3,\n        \"zipcode\":\"91001\",\n        \"geolocation\": {\n            \"lat\":\"-46.3159\",\n            \"long\":\"71.1496\"\n        }\n    },\n    \"phone\":\"1-570-236-7033\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/5ff4d0a62739f3aa7ab1184c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"5ff4d0a62739f3aa7ab1184c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User by User ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/5ff47c06fc08445df4d2d3f6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"5ff47c06fc08445df4d2d3f6"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Carts API",
+			"item": [
+				{
+					"name": "Get All Carts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/carts/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"carts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart by Cart Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/carts/5ff4d0a62739f3aa7ab1184c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"carts",
+								"5ff4d0a62739f3aa7ab1184c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cart by Cart Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/carts/5ff4d0a62739f3aa7ab1184c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"carts",
+								"5ff4d0a62739f3aa7ab1184c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Cart For User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/carts/5ff4d0a62739f3aa7ab1184c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"carts",
+								"5ff4d0a62739f3aa7ab1184c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart with Cart Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"products\": [\n            {\n                \"productId\": \"5ff4dd8a7ca46ffdc78cd181\",\n                \"quantity\": 4\n            },\n            {\n                \"productId\":\"5ff4dd8a7ca46ffdc78cd182\",\n                \"quantity\": 2\n            }\n        ]\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/carts/5ff4d0a62739f3aa7ab1184c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"carts",
+								"5ff4d0a62739f3aa7ab1184c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart by Cart Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/carts/clear/5ff4d0a62739f3aa7ab1184c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"carts",
+								"clear",
+								"5ff4d0a62739f3aa7ab1184c"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

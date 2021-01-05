@@ -4,7 +4,7 @@ import productModel from '../models/productSchema.js';
 
 export const getAllProducts = (req, res) => {
 	const limit = Number(req.query.limit) || 0;
-	const sortKey = (req.query.key == 'price') ? 'price' : (req.query.key == 'quantity') ? 'quantity' : 'productId' ;
+	const sortKey = (req.query.key == 'price') ? 'price' : (req.query.key == 'stock') ? 'stock' : 'productId' ;
 	const sortOrder = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
 	productModel.find()
 		.select(['-_id','-__v'])

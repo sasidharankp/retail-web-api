@@ -45,7 +45,12 @@ export function createCart(req,res) {
 		});
 		cartInfo.save()
 			.then(result => res.status(200).json(result))
-			.catch((error) => res.status(500).json({ message: error.message }));
+			.catch(error => {if(error.code==11000){
+				const errorKey=error.keyValue;
+				res.status(500).json({ message: `User with ${Object.keys(errorKey)} : ${Object.values(errorKey)}  Already Exists!`});
+			}else{
+				res.status(500).json({ message: error.message });
+			}});
 	}
 }
 
