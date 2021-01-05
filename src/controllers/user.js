@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 
 import userModel from '../models/userSchema.js';
-import mongoose from 'mongoose';
 import cartModel from '../models/cartSchema.js';
 
 export function getAllUsers(req, res) {
@@ -106,7 +106,6 @@ export function editUser(req, res) {
 		});
 	} 
 	const userInfo= {
-		userId: req.params.id,
 		email:req.body.email,
 		username:req.body.username,
 		password:bcrypt.hashSync(req.body.password, 5),
@@ -130,7 +129,7 @@ export function editUser(req, res) {
 	userModel.findOneAndUpdate({userId:id}, userInfo, {new: true})
 		.select(['-_id','-__v','-password'])
 		.then((result) => {
-			res.json(result);
+			res.status(200).json(result);
 		})
 		.catch((error) => res.status(500).json({ message: error.message }));
 
@@ -151,7 +150,10 @@ export const deleteUser = (req, res) => {
 			})
 			.then(() => {
 				cartModel.findOneAndDelete({cartId: req.params.id})
-					.then(result => res.status(200).json(result))
+					.then(result => {
+						const message= (result)? result:'Successfully Deleted User';
+						res.status(200).json({ message: message});
+					})
 					.catch((error) => res.status(500).json({ message: error.message }));
 			})
 			.catch((error) => res.status(404).json({ message: error.message }));

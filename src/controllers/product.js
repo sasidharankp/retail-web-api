@@ -1,10 +1,11 @@
+import mongoose from 'mongoose';
+
 import productModel from '../models/productSchema.js';
 
 export const getAllProducts = (req, res) => {
 	const limit = Number(req.query.limit) || 0;
 	const sortKey = (req.query.key == 'price') ? 'price' : (req.query.key == 'quantity') ? 'quantity' : 'productId' ;
 	const sortOrder = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
-
 	productModel.find()
 		.select(['-_id','-__v'])
 		.limit(limit)
@@ -45,7 +46,6 @@ export const getAllCategories = (req,res) => {
 		.catch((error) => res.status(404).json({ message: error.message }));
 };
 
-
 export const getProductsByCategory = (req,res) => {
 	const category = req.params.category;
 	const limit = Number(req.query.limit) || 0;
@@ -71,25 +71,20 @@ export const addProduct = (req, res) => {
 			message: 'data is undefined',
 		});
 	} else {
-		let productCount = 0;
-		productModel.estimatedDocumentCount()
-			.then((result) => {
-				productCount=result+1;
-			})
-			.then(() => {
-				const productInfo = new productModel({
-					productId: productCount + 1,
-					name: req.body.name,
-					price: req.body.price,
-					quantity:req.body.quantity,
-					description: req.body.description,
-					image: req.body.image,
-					category: req.body.category,
-				});
-				productInfo.save()
-					.then(result => res.status(200).json(result))
-					.catch((error) => res.status(500).json({ message: error.message }));
-			});
+		const uniqueId=mongoose.Types.ObjectId();
+		const productInfo = new productModel({
+			_id: uniqueId,
+			productId: uniqueId,
+			name: req.body.name,
+			price: req.body.price,
+			stock:req.body.stock,
+			description: req.body.description,
+			image: req.body.image,
+			category: req.body.category,
+		});
+		productInfo.save()
+			.then(result => res.status(200).json(result))
+			.catch((error) => res.status(500).json({ message: error.message }));
 	}
 };
 
@@ -117,7 +112,7 @@ export const editProduct = (req, res) => {
 	} 
 	const productInfo= {
 		name: req.body.name,
-		quantity:req.body.quantity,
+		stock:req.body.stock,
 		price: req.body.price,
 		description: req.body.description,
 		image: req.body.image,

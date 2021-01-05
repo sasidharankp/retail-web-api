@@ -3,14 +3,18 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const productSchema = Schema({
+	_id:{
+		type:Schema.Types.ObjectId,
+		immutable:true
+	},
 	productId:{
-		type:Number,
-		required:true,
+		type:Schema.Types.ObjectId,
+		immutable:true,
 		unique:true
 	},
-	quantity:{
+	stock:{
 		type:Number,
-		required:true,
+		required:true
 	},
 	name: {
 		type:String,

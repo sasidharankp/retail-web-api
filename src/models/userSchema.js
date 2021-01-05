@@ -8,7 +8,7 @@ const userSchema = new Schema({
 	},
 	userId:{
 		type:Schema.Types.ObjectId,
-		mmutable:true,
+		immutable:true,
 		required:true
 	},
 	email:{

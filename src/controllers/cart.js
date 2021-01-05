@@ -6,7 +6,7 @@ export function getAllCarts(req,res) {
 	const sort = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
     
 	cartModel.find()
-		.populate('user')
+		// .populate('user','name email username phone address.city -_id')
 		.select('-_id -products._id -__v')
 		.limit(limit)
 		.sort({id:sort})
@@ -23,7 +23,8 @@ export function getCartbyId(req,res) {
 	}else{
 		cartModel.findOne({cartId:id})
 			.select('-_id -products._id -__v')
-			.populate('user')
+			.populate('user','name email username phone address.city -_id')
+			.populate('products.productId','productId name price description image -_id')
 			.then((result) => res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
@@ -66,6 +67,21 @@ export function updateCart(req,res) {
 		.catch((error) => res.status(500).json({ message: error.message }));
 }
 
+export function deleteCart(req, res) {
+	const id = req.params.id;
+	if (id == null) {
+		res.json({
+			status: 'error',
+			message: 'cart id should be provided'
+		});
+	} else {
+		cartModel.findOneAndDelete({cartId:id})
+			.select('-_id -products._id')
+			.then(result=> res.status(200).json(result))
+			.catch((error) => res.status(500).json({ message: error.message }));
+	}
+}
+
 export function clearCart(req, res) {
 	const id = req.params.id;
 	if (id == null) {
@@ -74,7 +90,8 @@ export function clearCart(req, res) {
 			message: 'cart id should be provided'
 		});
 	} else {
-		cartModel.findOneAndUpdate({cartId:id},{products:[]})
+		const options ={ upsert: true, new: true};
+		cartModel.findOneAndUpdate({cartId:id},{products:[]},options)
 			.select('-_id -products._id')
 			.then(result=> res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
