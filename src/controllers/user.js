@@ -78,7 +78,7 @@ export function addUser(req, res) {
 			})
 			.then(() => {
 				const cartInfo =new cartModel({
-					_id:mongoose.Types.ObjectId(),
+					_id:uniqueId,
 					cartId:uniqueId,
 					user:uniqueId,
 					products:[]
