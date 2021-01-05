@@ -94,9 +94,7 @@ describe('/users Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.to.have.all.keys([ '__v', '_id', 'cartId', 'createdAt', 'products', 'updatedAt','user' ])
-					.to.not.have.keys(['_id', '__v']);
-				expect(res.body).to.have.property('user', testUserId);
+					.to.include.keys([ 'message' ]);
 				expect(res.body).to.not.have.property('errors');
 				done();
 			});

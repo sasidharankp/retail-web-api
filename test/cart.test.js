@@ -5,6 +5,7 @@ import  chai  from 'chai';
 import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import server from '../app.js';
+import cartModel from '../src/models/cartSchema.js';
 
 const expect=chai.expect;
 // const should=chai.should;
@@ -12,11 +13,12 @@ const expect=chai.expect;
 chai.use(chaiHttp);
 
 describe('/carts Routes', () => {
+	const productId= mongoose.Types.ObjectId();
 	let testCartId=mongoose.Types.ObjectId();
 	let cartInfo = {
 		products: [
 			{
-				productId: 10,
+				productId: productId,
 				quantity: 5
 			}
 		]
@@ -90,4 +92,24 @@ describe('/carts Routes', () => {
 				done();
 			});
 	});
+	before(() => {
+		cartModel.estimatedDocumentCount()
+			.then((result) => {
+				if(result>0){
+					clearDb(cartModel);
+				}
+			})
+			.catch((error) => console.log(error));
+	});
+
+	after(() => {
+		clearDb(cartModel);
+	});
+
 });
+
+const clearDb= (model) => {
+	model.deleteMany({})
+		.then((result) => console.log(result.deletedCount))
+		.catch((error) => console.log(error));
+};

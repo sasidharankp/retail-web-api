@@ -95,7 +95,13 @@ export const bulkAdd = (req, res) => {
 			message: 'data is undefined',
 		});
 	} else {
-		productModel.insertMany(req.body)
+		const products = req.body.map(product => {
+			let uniqueId = mongoose.Types.ObjectId();
+			Object.assign(product, {'productId':uniqueId});
+			Object.assign(product, {'_id':uniqueId});
+			return product;
+		});
+		productModel.insertMany(products)
 			.then(result => res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
 
@@ -146,4 +152,10 @@ export const deleteProduct = (req, res) => {
 			})
 			.catch((error) => res.status(404).json({ message: error.message }));
 	}
+};
+
+export const deleteAllProducts = (_req,res) =>{
+	productModel.deleteMany({})
+		.then((result) => res.status(200).json(result))
+		.catch((error) => res.status(500).json({ message: error.message }));
 };

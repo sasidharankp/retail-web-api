@@ -35,7 +35,7 @@ describe('/products Routes', () => {
 					.to.be.an('array').that.is.not.empty  
 					.not.to.be.an('object');
 				expect(res.body[0]).to.be.an('object')
-					.that.have.all.keys([ 'productId', 'category', 'name','quantity', 'price', 'description', 'image', '_id', '__v' ]);
+					.that.have.all.keys([ 'productId', 'category', 'name','stock', 'price', 'description', 'image', '_id', '__v' ]);
 				expect(res.body).to.not.have.property('errors');
 				testProductId=res.body.productId;
 				done();
@@ -49,7 +49,7 @@ describe('/products Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'quantity', 'description', 'image', '_id', '__v' ]);
+					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
 				expect(res.body).to.not.have.property('errors');
 				testProductId=res.body.productId;
 				done();
@@ -77,7 +77,7 @@ describe('/products Routes', () => {
 				expect(err).to.be.a('null');
 				expect(res.body)
 					.to.be.an('object')
-					.to.includes.all.keys([ 'productId', 'category', 'name', 'price','quantity', 'description','image' ]);
+					.to.includes.all.keys([ 'productId', 'category', 'name', 'price','stock', 'description','image' ]);
 				done();
 			});
 	});
@@ -116,7 +116,7 @@ describe('/products Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'quantity', 'description', 'image' ]);
+					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image' ]);
 				expect(res.body).to.have.property('description', 'Laser Light Saber, Red Color');
 				expect(res.body).to.not.have.property('errors');
 				done();
@@ -129,9 +129,22 @@ describe('/products Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.to.have.all.keys([ 'productId', 'category', 'name', 'price', 'quantity', 'description', 'image' ])
+					.to.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image' ])
 					.to.not.have.keys(['_id', '__v']);
 				expect(res.body).to.have.property('productId', testProductId);
+				expect(res.body).to.not.have.property('errors');
+				done();
+			});
+	});
+
+	it('it should DELETE all Products in the Collection', (done) => {
+		chai.request(server)
+			.delete('/products/clear/all')
+			.end((err, res) => {
+				expect(res.status).to.deep.eql(200);
+				expect(res.body).to.be.an('object')
+					.to.include.keys([ 'deletedCount']);
+				expect(res.body.deletedCount).to.be.greaterThan(0);
 				expect(res.body).to.not.have.property('errors');
 				done();
 			});
@@ -153,7 +166,7 @@ describe('/products Routes', () => {
 
 });
 
-const clearDb=(model)=>{
+const clearDb= (model) => {
 	model.deleteMany({})
 		.then((result) => console.log(result.deletedCount))
 		.catch((error) => console.log(error));
