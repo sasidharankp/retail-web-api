@@ -145,13 +145,17 @@ export const deleteUser = (req, res) => {
 			.select(['-_id','-__v', '-password'])
 			.then((result) => {
 				if(!result){
-					res.status(404).json({ message: 'User Not Found' });
+					res.status(404).json(
+						{ 
+							error: `Unable to find any user with Id: ${req.params.id}`
+						});
 				}
 			})
 			.then(() => {
 				cartModel.findOneAndDelete({cartId: req.params.id})
+					.select('user -_id')
 					.then(result => {
-						const message= (result)? result:'Successfully Deleted User';
+						const message= (result)? `Successfully Deleted User : ${result.user}`:'Successfully Deleted User';
 						res.status(200).json({ message: message});
 					})
 					.catch((error) => res.status(500).json({ message: error.message }));

@@ -10,6 +10,7 @@ import indexRouter from './src/routes/index.js';
 import productRouter from './src/routes/product.js';
 import cartRouter from './src/routes/cart.js';
 import userRouter from './src/routes/user.js';
+import orderRouter from './src/routes/order.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express();
 
@@ -41,7 +42,7 @@ app.use('/', indexRouter);
 app.use('/products', productRouter);
 app.use('/users', userRouter);
 app.use('/carts', cartRouter);
-
+app.use('/orders', orderRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
 	next(createError(404));
