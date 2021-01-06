@@ -150,8 +150,8 @@ describe('/products Routes', () => {
 			});
 	});
 	
-	before(() => {
-		productModel.estimatedDocumentCount()
+	before(async () => {
+		await productModel.estimatedDocumentCount()
 			.then((result) => {
 				if(result>0){
 					clearDb(productModel);

@@ -99,8 +99,8 @@ describe('/users Routes', () => {
 				done();
 			});
 	});
-	before(() => {
-		userModel.estimatedDocumentCount()
+	before(async () => {
+		await userModel.estimatedDocumentCount()
 			.then((result) => {
 				if(result>0){
 					clearDb(userModel);

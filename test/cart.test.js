@@ -6,6 +6,7 @@ import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import server from '../app.js';
 import cartModel from '../src/models/cartSchema.js';
+import {productInfo} from '../fixtures/products.js';
 
 const expect=chai.expect;
 // const should=chai.should;
@@ -13,20 +14,34 @@ const expect=chai.expect;
 chai.use(chaiHttp);
 
 describe('/carts Routes', () => {
-	const productId= mongoose.Types.ObjectId();
-	let testCartId=mongoose.Types.ObjectId();
+	let testCartId;
+	let testUserId=mongoose.Types.ObjectId();
 	let cartInfo = {
 		products: [
 			{
-				productId: productId,
+				productId: '',
 				quantity: 5
 			}
 		]
 	};
-  
+
+	it('it should create a new product', (done) => {
+		chai.request(server)
+			.post('/products')
+			.send(productInfo)
+			.end((err, res) => {
+				expect(res.status).to.deep.eql(200);
+				expect(res.body).to.be.an('object')
+					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
+				expect(res.body).to.not.have.property('errors');
+				cartInfo.products[0].productId=res.body.productId;
+				done();
+			});
+	});
+
 	it('it should create a new Cart', (done) => {
 		chai.request(server)
-			.post(`/carts/${testCartId}`)
+			.post(`/carts/${testUserId}`)
 			.send(cartInfo)
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
@@ -51,6 +66,20 @@ describe('/carts Routes', () => {
 			});
 	});
 
+	it('it should add items to cart', (done) => {
+		chai.request(server)
+			.put(`/carts/${testCartId}`)
+			.send(cartInfo)
+			.end((err, res) => {
+				expect(res.status).to.deep.eql(200);
+				expect(res.body).to.be.an('object')
+					.that.includes.all.keys([ 'cartId', 'user', 'products', 'updatedAt','cartTotal' ]);
+				expect(res.body.products[0]).to.have.property('quantity', 5);
+				expect(res.body).to.not.have.property('errors');
+				done();
+			});
+	});
+
 	it('it should GET Only one Cart', (done) => {
 		chai.request(server)
 			.get(`/carts/${testCartId}`)
@@ -59,7 +88,7 @@ describe('/carts Routes', () => {
 				expect(err).to.be.a('null');
 				expect(res.body)
 					.to.be.an('object')
-					.to.includes.all.keys([ 'cartId', 'user', 'createdAt', 'products', 'updatedAt' ]);
+					.to.includes.all.keys([ 'cartId', 'user', 'createdAt', 'products', 'updatedAt','cartTotal' ]);
 				done();
 			});
 	});
@@ -72,7 +101,7 @@ describe('/carts Routes', () => {
 			.end((err, res) => {
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
-					.that.includes.all.keys([ 'cartId', 'user', 'createdAt', 'products', 'updatedAt' ]);
+					.that.includes.all.keys([ 'cartId', 'user', 'products', 'updatedAt','cartTotal' ]);
 				expect(res.body.products[0]).to.have.property('quantity', 9);
 				expect(res.body).to.not.have.property('errors');
 				done();
@@ -92,8 +121,8 @@ describe('/carts Routes', () => {
 				done();
 			});
 	});
-	before(() => {
-		cartModel.estimatedDocumentCount()
+	before(async() => {
+		await cartModel.estimatedDocumentCount()
 			.then((result) => {
 				if(result>0){
 					clearDb(cartModel);

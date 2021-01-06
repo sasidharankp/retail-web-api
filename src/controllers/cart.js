@@ -1,13 +1,15 @@
+import _ from 'lodash';
+
 import cartModel from '../models/cartSchema.js';
 import mongoose from 'mongoose';
+import productModel from '../models/productSchema.js';
 
 export function getAllCarts(req,res) {
 	const limit = Number(req.query.limit) || 0;
 	const sort = (req.query.sort == 'desc') ? -1 : (req.query.sort == 'asc') ? 1 : 1 ;
     
 	cartModel.find()
-		// .populate('user','name email username phone address.city -_id')
-		.select('-_id -products._id -__v')
+		.select('-_id -products._id -__v -createdAt -user')
 		.limit(limit)
 		.sort({id:sort})
 		.then(result=>{
@@ -25,7 +27,23 @@ export function getCartbyId(req,res) {
 			.select('-_id -products._id -__v')
 			.populate('user','name email username phone address.city -_id')
 			.populate('products.productId','productId name price description image -_id')
-			.then((result) => res.status(200).json(result))
+			.then((result) => {
+				result.products = result.products.filter(x => x.productId);
+				const newCartTotal=result.products.map(y => (y.quantity*y.productId.price)).reduce((a, c) => a + c);
+				if(newCartTotal!=result.cartTotal){
+					cartModel.findOneAndUpdate({cartId:id}, {'cartTotal': newCartTotal}, {new: true})
+						.select('-_id -products._id -__v')
+						.populate('user','name email username phone address.city -_id')
+						.populate('products.productId','productId name price description image -_id')
+						.then((result) => {
+							result.products = result.products.filter(x => x.productId);
+							res.status(200).json(result);
+						})
+						.catch((error) => res.status(500).json({ message: error.message }));
+				}else{
+					res.status(200).json(result);
+				}
+			})
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
 }
@@ -55,21 +73,58 @@ export function createCart(req,res) {
 }
 
 export function updateCart(req,res) {
-	const id = req.params.id;
+	const cartId = req.params.id;
 	const options ={ upsert: true, new: true, setDefaultsOnInsert: true };
-	if (typeof req.body == undefined || id == null) {
+	if (typeof req.body == undefined || !mongoose.Types.ObjectId.isValid(cartId)) {
 		res.json({
 			status: 'error',
 			message: 'Re-check your product data',
 		});
-	} 
-	const cartInfo= {
-		products:req.body.products
-	};
-	cartModel.findOneAndUpdate({cartId:id}, cartInfo, options)
-		.select('-_id -products._id -__v')
-		.then((result) => res.status(200).json(result))
-		.catch((error) => res.status(500).json({ message: error.message }));
+	}
+
+	const productsList=req.body.products.map(product => {
+		if(product.quantity>0){
+			return product.productId;
+		}
+	}).filter(id => mongoose.Types.ObjectId.isValid(id));
+	if(productsList.length){
+		productModel.find({'productId': { $in: productsList}})
+			.select('price productId -_id')
+			.then((result) => {
+				var validProducts=result.map(product => {
+					return {
+						productId:String(product.productId),
+						price:product.price
+					};
+				});
+				var userCart=req.body.products;
+				
+				var cartInfo = _.map(validProducts, function(item) {
+					return _.merge(item, _.find(userCart, { 'productId' : item.productId }));
+				});
+
+				const cartTotal = cartInfo.map(x => (x.quantity*x.price)).reduce((a, c) => a + c);
+
+				if (cartInfo.length) {
+					const query={ '$set': { 'products': cartInfo, 'cartTotal': cartTotal}};
+					cartModel.findOneAndUpdate({cartId:cartId}, query, options)
+						.select('-_id -products._id -__v -createdAt')
+						.populate('products.productId','name price -_id')
+						.then((result) => res.status(200).json(result))
+						.catch((error) => res.status(404).json({ message: error.message }));
+				}else{
+					res.status(404).json({
+						status: 'error',
+						message: 'products Not Found'
+					});
+				}
+
+			})
+			.catch((error) => res.status(404).json({ message: error.message }));
+	}else{
+		res.status(404).json({ error: 'Check Cart Data', data:req.body });
+	}
+		
 }
 
 export function deleteCart(req, res) {
@@ -96,7 +151,8 @@ export function clearCart(req, res) {
 		});
 	} else {
 		const options ={ upsert: true, new: true};
-		cartModel.findOneAndUpdate({cartId:id},{products:[]},options)
+		const query={ '$set': { 'products': [], 'cartTotal': 0}};
+		cartModel.findOneAndUpdate({cartId:id},query,options)
 			.select('-_id -products._id')
 			.then(result=> res.status(200).json(result))
 			.catch((error) => res.status(500).json({ message: error.message }));
