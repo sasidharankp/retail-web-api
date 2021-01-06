@@ -121,15 +121,6 @@ describe('/carts Routes', () => {
 				done();
 			});
 	});
-	before(async() => {
-		await cartModel.estimatedDocumentCount()
-			.then((result) => {
-				if(result>0){
-					clearDb(cartModel);
-				}
-			})
-			.catch((error) => console.log(error));
-	});
 
 	after(() => {
 		clearDb(cartModel);
@@ -137,8 +128,8 @@ describe('/carts Routes', () => {
 
 });
 
-const clearDb= (model) => {
-	model.deleteMany({})
+const clearDb= async (model) => {
+	await model.deleteMany({})
 		.then((result) => console.log(result.deletedCount))
 		.catch((error) => console.log(error));
 };
