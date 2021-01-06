@@ -30,7 +30,7 @@ describe('/carts Routes', () => {
 			.post('/products')
 			.send(productInfo)
 			.end((err, res) => {
-				console.log(res.body)
+				console.log(res.body);
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
 					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
