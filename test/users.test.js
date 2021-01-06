@@ -44,7 +44,6 @@ describe('/users Routes', () => {
 	});
 
 	it('it should GET Only one User', (done) => {
-		console.log(testUserId);
 		chai.request(server)
 			.get(`/users/${testUserId}`)
 			.end((err, res) => {
@@ -99,7 +98,7 @@ describe('/users Routes', () => {
 				done();
 			});
 	});
-	
+
 	before(async () => {
 		await userModel.estimatedDocumentCount()
 			.then((result) => {
