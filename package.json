@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test nyc --reporter=text mocha --exit",
+    "test": "NODE_ENV=test nyc --reporter=text mocha --timeout 5000 --exit",
     "coverage": "codecov --token=235d2ddf-64eb-45b7-b40e-a8e0a51e05c6",
     "lint": "eslint --cache --ext '.js,.json' .",
     "lint:fix": "yarn lint --fix"
