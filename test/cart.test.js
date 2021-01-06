@@ -25,13 +25,11 @@ describe('/carts Routes', () => {
 		]
 	};
 
-	// eslint-disable-next-line mocha/no-exclusive-tests
-	it.only('it should create a new product', (done) => {
+	it('it should create a new product', (done) => {
 		chai.request(server)
 			.post('/products')
 			.send(productInfo)
 			.end((err, res) => {
-				console.log(res.body);
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
 					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
@@ -39,7 +37,7 @@ describe('/carts Routes', () => {
 				cartInfo.products[0].productId=res.body.productId;
 			});
 		done();
-	}).timeout(5000);
+	});
 
 	it('it should create a new Cart', (done) => {
 		chai.request(server)
@@ -53,7 +51,7 @@ describe('/carts Routes', () => {
 				testCartId=res.body.cartId;
 				done();
 			});
-	}).timeout(5000);
+	});
   
 	it('it should GET all the Carts', (done) => {
 		chai.request(server)
