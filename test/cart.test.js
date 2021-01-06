@@ -25,7 +25,8 @@ describe('/carts Routes', () => {
 		]
 	};
 
-	it('it should create a new product', (done) => {
+	// eslint-disable-next-line mocha/no-exclusive-tests
+	it.only('it should create a new product', (done) => {
 		chai.request(server)
 			.post('/products')
 			.send(productInfo)
