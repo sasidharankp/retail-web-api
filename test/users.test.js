@@ -99,6 +99,7 @@ describe('/users Routes', () => {
 				done();
 			});
 	});
+	
 	before(async () => {
 		await userModel.estimatedDocumentCount()
 			.then((result) => {

@@ -25,14 +25,11 @@ describe('/carts Routes', () => {
 		]
 	};
 
-	// eslint-disable-next-line mocha/no-exclusive-tests
-	it.only('it should create a new product', (done) => {
-		console.log(`PRODUCT INFO: ${JSON.stringify(productInfo,null,2)}`);
+	it('it should create a new product', (done) => {
 		chai.request(server)
 			.post('/products')
 			.send(productInfo)
 			.end((err, res) => {
-				console.log(`RESPONSE: ${JSON.stringify(res.body,null,2)}`);
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
 					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
@@ -40,7 +37,7 @@ describe('/carts Routes', () => {
 				cartInfo.products[0].productId=res.body.productId;
 				done();
 			});
-	}).timeout(10000);
+	}).timeout(5000);
 
 	it('it should create a new Cart', (done) => {
 		chai.request(server)
@@ -125,6 +122,15 @@ describe('/carts Routes', () => {
 			});
 	});
 
+	before(async () => {
+		await cartModel.estimatedDocumentCount()
+			.then((result) => {
+				if(result>0){
+					clearDb(cartModel);
+				}
+			})
+			.catch((error) => console.log(error));
+	});
 	after(() => {
 		clearDb(cartModel);
 	});
