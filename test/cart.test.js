@@ -40,7 +40,7 @@ describe('/carts Routes', () => {
 				cartInfo.products[0].productId=res.body.productId;
 				done();
 			});
-	}).timed0ut(10000);
+	}).timeout(10000);
 
 	it('it should create a new Cart', (done) => {
 		chai.request(server)
