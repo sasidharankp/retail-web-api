@@ -35,8 +35,8 @@ describe('/carts Routes', () => {
 					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
 				expect(res.body).to.not.have.property('errors');
 				cartInfo.products[0].productId=res.body.productId;
+				done();
 			});
-		done();
 	});
 
 	it('it should create a new Cart', (done) => {
@@ -49,8 +49,8 @@ describe('/carts Routes', () => {
 					.that.include.all.keys([ '_id', 'cartId', 'user', 'createdAt', 'products', 'updatedAt', '__v']);
 				expect(res.body).to.not.have.property('errors');
 				testCartId=res.body.cartId;
+				done();
 			});
-		done();
 	});
   
 	it('it should GET all the Carts', (done) => {
