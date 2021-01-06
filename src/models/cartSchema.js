@@ -27,7 +27,12 @@ const cartSchema = new Schema({
 				required:true
 			}
 		}
-	]
+	],
+	cartTotal:{
+		type:Number,
+		equired:true,
+		default:0
+	}
 },
 { 
 	timestamps: true 
