@@ -35,8 +35,8 @@ describe('/carts Routes', () => {
 					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
 				expect(res.body).to.not.have.property('errors');
 				cartInfo.products[0].productId=res.body.productId;
-				done();
 			});
+		done();
 	});
 
 	it('it should create a new Cart', (done) => {
