@@ -25,11 +25,14 @@ describe('/carts Routes', () => {
 		]
 	};
 
-	it('it should create a new product', (done) => {
+	// eslint-disable-next-line mocha/no-exclusive-tests
+	it.only('it should create a new product', (done) => {
+		console.log(`PRODUCT INFO: ${JSON.stringify(productInfo,null,2)}`);
 		chai.request(server)
 			.post('/products')
 			.send(productInfo)
 			.end((err, res) => {
+				console.log(`RESPONSE: ${JSON.stringify(res.body,null,2)}`);
 				expect(res.status).to.deep.eql(200);
 				expect(res.body).to.be.an('object')
 					.that.have.all.keys([ 'productId', 'category', 'name', 'price', 'stock', 'description', 'image', '_id', '__v' ]);
