@@ -91,13 +91,13 @@ export function updateCart(req,res) {
 		productModel.find({'productId': { $in: productsList}})
 			.select('price productId -_id')
 			.then((result) => {
-				var validProducts=result.map(product => {
+				const validProducts=result.map(product => {
 					return {
 						productId:String(product.productId),
 						price:product.price
 					};
 				});
-				var userCart=req.body.products;
+				const userCart=req.body.products;
 				
 				var cartInfo = _.map(validProducts, function(item) {
 					return _.merge(item, _.find(userCart, { 'productId' : item.productId }));

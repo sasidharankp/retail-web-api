@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import cartModel from '../models/cartSchema.js';
 import orderModel from '../models/orderSchema.js';
 import userModel from '../models/userSchema.js';
 
@@ -64,6 +65,7 @@ export const getOrderByOrderId = (req, res) => {
 };
 
 export const placeOrder = (req, res) => {
+	const options ={ upsert: true, new: true, setDefaultsOnInsert: true };
 	if (typeof req.body == undefined || !mongoose.Types.ObjectId.isValid(req.body.userId)) {
 		res.json({
 			status: 'error',
@@ -82,22 +84,60 @@ export const placeOrder = (req, res) => {
 
 		userModel.exists({userId:userId})
 			.then((result)=>{
+				
 				if(result){
-					orderInfo.save()
-						.then(orderResult => {
-							userModel.findByIdAndUpdate(
-								userId, 
-								{ $push: { orders: orderResult } },
-								{ new: true}
-							)
-								.then(() => {									
-									res.status(200).json({
-										orderId:orderResult.orderId,
-										status:orderResult.orderStatus,
-									});
+					cartModel.findOne({cartId:userId})
+						.select('-_id -products._id -createdAt -updatedAt -__v')
+						.populate('products.productId','productId price stock -_id')
+						.then((result) => {
+							let quantity;
+							let cartAdjusted=false;
+							let updatedCart=result.products.map(product => {
+								if(product.quantity>  product.productId.stock){
+									quantity =product.productId.stock;
+									cartAdjusted=true;
+								}else{
+									quantity =product.quantity;
+									cartAdjusted=false;
+								}
+								return({productId:product.productId.productId,quantity:quantity, price:product.productId.price});
+							});
+							const cartTotal = updatedCart.map(x => (x.quantity*x.price)).reduce((a, c) => a + c);
+							const query={ '$set': { 'products': updatedCart, 'cartTotal': cartTotal}};
+							if(cartAdjusted==true){
+								cartModel.findOneAndUpdate({cartId:userId}, query, options)
+									.select('-_id -products._id -__v -createdAt')
+									.populate('products.productId','name price -_id')
+									.then((result) => {
+										res.status(200).json({
+											message:'Your cart has been adjusted based on availabilty. Please Validate and Proceed',
+											updatedCart:result
+										});
+									})
+									.catch((error) => res.status(404).json({ message: error.message }));
+							}else{
+								orderInfo.save()
+									.then(orderResult => {
+										userModel.findByIdAndUpdate(
+											userId, 
+											{ $push: { orders: orderResult } },
+											{ new: true}
+										)
+											.then((result) => {		
+												console.log(result);							
+												res.status(200).json({
+													orderId:orderResult.orderId,
+													status:orderResult.orderStatus,
+												});
 
-								});
+											});
+									});
+							}
+							
 						});
+					
+
+					
 				}else{
 					res.status(200).json({
 						message:'User Does Not Exist!'
