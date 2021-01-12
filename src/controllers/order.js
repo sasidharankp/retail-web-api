@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import cartModel from '../models/cartSchema.js';
 import orderModel from '../models/orderSchema.js';
+import productModel from '../models/productSchema.js';
 import userModel from '../models/userSchema.js';
 
 export const getAllOrders = (req, res) => {
@@ -42,12 +43,12 @@ export const getOrderByOrderId = (req, res) => {
 		const id = req.params.id;
 		orderModel.findOne({orderId:id})
 			.select('-_id -__v -createdAt')
-			.populate({
-				path: 'orderInfo',select:'products, -_id',
-				populate: ({
-					path: 'products.productId', select:'productId name price description image -_id'
-				}),
-			})
+			// .populate({
+			// 	path: 'orderInfo',select:'products, -_id',
+			// 	populate: ({
+			// 		path: 'products.productId', select:'productId name price description image -_id'
+			// 	}),
+			// })
 			.populate('userInfo','name address phone -_id')
 			.then((result) => {
 				if (!result) {
@@ -100,9 +101,14 @@ export const placeOrder = (req, res) => {
 									quantity =product.quantity;
 									cartAdjusted=false;
 								}
-								return({productId:product.productId.productId,quantity:quantity, price:product.productId.price});
+								return({
+									productId:product.productId.productId,
+									quantity:quantity, 
+									price:product.productId.price,
+									stock:product.productId.stock
+								});
 							});
-							const cartTotal = updatedCart.map(x => (x.quantity*x.price)).reduce((a, c) => a + c);
+							const cartTotal = (updatedCart.length)?updatedCart.map(x => (x.quantity*x.price)).reduce((a, c) => a + c):0;
 							const query={ '$set': { 'products': updatedCart, 'cartTotal': cartTotal}};
 							if(cartAdjusted==true){
 								cartModel.findOneAndUpdate({cartId:userId}, query, options)
@@ -116,21 +122,23 @@ export const placeOrder = (req, res) => {
 									})
 									.catch((error) => res.status(404).json({ message: error.message }));
 							}else{
+								updatedCart.forEach(i => {
+									productModel.findByIdAndUpdate(i.productId,{ $set: { stock: i.stock-i.quantity }})
+										.then(() => {});
+								});
 								orderInfo.save()
 									.then(orderResult => {
 										userModel.findByIdAndUpdate(
 											userId, 
 											{ $push: { orders: orderResult } },
 											{ new: true}
-										)
-											.then((result) => {		
-												console.log(result);							
+										).then((result) => {		
+											if(result){
 												res.status(200).json({
 													orderId:orderResult.orderId,
 													status:orderResult.orderStatus,
-												});
-
-											});
+												});}
+										}).then(()=>clearCart(userId));
 									});
 							}
 							
@@ -216,4 +224,14 @@ export function deleteOrder(req, res) {
 				res.status(200).json(result);})
 			.catch((error) => res.status(500).json({ message: error.message }));
 	}
+}
+
+
+function clearCart(cartId){
+	const options ={ upsert: true, new: true};
+	const query={ '$set': { 'products': [], 'cartTotal': 0}};
+	cartModel.findOneAndUpdate({cartId:cartId},query,options)
+		.select('-_id -products._id')
+		.then(()=> console.log('cart cleared'))
+		.catch((error) => console.log({ message: error.message }));
 }
